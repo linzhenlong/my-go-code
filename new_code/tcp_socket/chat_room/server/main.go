@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/linzhenlong/mygo/go_dev/new_code/tcp_socket/chat_room/common/message"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room/common/message"
 	"github.com/pkg/errors"
 	_ "io"
 	"net"

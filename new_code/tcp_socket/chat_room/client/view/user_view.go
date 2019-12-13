@@ -2,7 +2,7 @@ package view
 
 import (
 	"fmt"
-	"github.com/linzhenlong/mygo/go_dev/new_code/tcp_socket/chat_room/client/service"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room/client/service"
 )
 
 type UserView struct {
