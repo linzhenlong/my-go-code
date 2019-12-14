@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	m "go_dev/new_code/testing/testcase02/monster"
+	m "github.com/linzhenlong/my-go-code/new_code/testing/testcase02/monster"
 )
 
 func main()  {

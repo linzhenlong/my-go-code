@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_dev/new_code/factory/model"
+	"github.com/linzhenlong/my-go-code/new_code/factory/model"
 )
 
 func main()  {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	monster2 "go_dev/new_code/testing/testcase02/monster"
+	monster2 "github.com/linzhenlong/my-go-code/new_code/testing/testcase02/monster"
 	"testing"
 )
 

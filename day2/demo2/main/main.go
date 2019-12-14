@@ -1,7 +1,7 @@
 package main
 
 import (
-    a "go_dev/day2/demo2/add"
+    a "github.com/linzhenlong/my-go-code/day2/demo2/add"
     "fmt"
 )
 

@@ -2,8 +2,8 @@ package view
 
 import (
 	"fmt"
-	"go_dev/new_code/project/customerManage/model"
-	"go_dev/new_code/project/customerManage/service"
+	"github.com/linzhenlong/my-go-code/new_code/project/customerManage/model"
+	"github.com/linzhenlong/my-go-code/new_code/project/customerManage/service"
 	"strings"
 )
 

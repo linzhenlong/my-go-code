@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	jiecheng2 "go_dev/day2/demo18/jiecheng"
+	jiecheng2 "github.com/linzhenlong/my-go-code/day2/demo18/jiecheng"
 )
-
 func main() {
 
 	var n int = 10

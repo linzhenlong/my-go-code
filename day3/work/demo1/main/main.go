@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_dev/day3/work/demo1/algorithm"
+	"github.com/linzhenlong/my-go-code/day3/work/demo1/algorithm"
 )
 
 func main() {

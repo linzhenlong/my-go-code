@@ -13,7 +13,7 @@ type monster struct {
 	Skill []string `json:"skill"`
 }
 
-const FILENAME = "/Users/smzdm/webroot/golang/src/go_dev/new_code/testing/testcase02/main/test.log"
+const FILENAME = "/Users/smzdm/webroot/golang/src/github.com/linzhenlong/my-go-code/new_code/testing/testcase02/main/test.log"
 
 func (m *monster)Store() (bool, error){
 	str , err := json.Marshal(m)

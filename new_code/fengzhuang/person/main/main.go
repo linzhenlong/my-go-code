@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	personModel "go_dev/new_code/fengzhuang/person/model"
+	personModel "github.com/linzhenlong/my-go-code/new_code/fengzhuang/person/model"
 )
 
 func main() {

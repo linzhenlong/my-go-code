@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go_dev/new_code/project/customerManage/view"
+	"github.com/linzhenlong/my-go-code/new_code/project/customerManage/view"
 )
 
 func main()  {

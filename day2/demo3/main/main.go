@@ -2,7 +2,7 @@ package main
 
 import (
     "fmt"
-    "go_dev/day2/demo3/sex"
+    "github.com/linzhenlong/my-go-code/day2/demo3/sex"
     "time"
 )
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go_dev/new_code/array/练习/work1"
+	"github.com/linzhenlong/my-go-code/new_code/array/练习/work1"
 )
 
 func main()  {

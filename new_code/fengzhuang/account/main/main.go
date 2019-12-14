@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go_dev/new_code/fengzhuang/account/model"
+	"github.com/linzhenlong/my-go-code/new_code/fengzhuang/account/model"
 )
 
 func main()  {

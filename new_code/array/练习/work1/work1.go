@@ -2,7 +2,7 @@ package work1
 
 import (
 	"fmt"
-	"go_dev/new_code/array/练习/sort"
+	"github.com/linzhenlong/my-go-code/new_code/array/练习/sort"
 	"math/rand"
 	"time"
 )

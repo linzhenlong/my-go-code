@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go_dev/redis_test/redigo/cmd"
+	"github.com/linzhenlong/my-go-code/redis_test/redigo/cmd"
 )
 
 

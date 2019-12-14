@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"go_dev/redis_test/redigo/pool"
+	"github.com/linzhenlong/my-go-code/redis_test/redigo/pool"
 )
 
 func Get()  {

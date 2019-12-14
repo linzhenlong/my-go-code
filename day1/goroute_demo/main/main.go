@@ -1,8 +1,8 @@
 package main
 
 import (
-    "go_dev/day1/goroute_demo/goroute"
     "fmt"
+    "github.com/linzhenlong/my-go-code/day1/goroute_demo/goroute"
 )
 
 func main()  {
