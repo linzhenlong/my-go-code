@@ -3,6 +3,7 @@ package message
 const (
 	LoginMsgType = "loginRequest"
 	LoginResMsgType = "loginResponse"
+	RegisterMsgType = "register"
 )
 
 type Message struct {
@@ -24,3 +25,9 @@ type LoginResMsg struct {
 	ErrorMsg string `json:"error_msg"`
 }
 
+// 注册信息.
+type RegisterMsg struct {
+	UserId int `json:"user_id"`
+	UserPwd string `json:"user_pwd"`
+	UserName string `json:"user_name"`
+}

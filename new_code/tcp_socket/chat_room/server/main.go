@@ -10,67 +10,126 @@ import (
 	"net"
 )
 
-func readPkg(conn net.Conn) (message.LoginResMsg, error) {
-	buf := make([]byte, 8096)
-	n, err := conn.Read(buf[0:4])
-	response := message.LoginResMsg{
-		ErrorCode: 500,
-		ErrorMsg:  "",
-	}
+
+func readPkg(conn net.Conn) (msg message.Message, err error) {
+	buf := make([]byte, 4096)
+	fmt.Println("读取客户端发送消息")
+
+	_, err = conn.Read(buf[:4])
 	if err != nil {
-		response.ErrorMsg = err.Error()
-		response.ErrorCode = 500
-		return response, errors.New("conn.Read head出错")
+		return
 	}
 
-	// 根据读到的buf[0:4] 转成uint32类型的
-	pkgLen := binary.BigEndian.Uint32(buf[0:4])
+	// 根据buf[:4]转成一个uint32类型
+	var pkgLen uint32
+	pkgLen = binary.BigEndian.Uint32(buf[:4])
 
-	// 根据pkgLen 读取消息内容
-	// buf[0:pkgLen] 表示获取客户端发送的数据包读取出pkgLen长度的数据，放到buf里面去.
-	n, err = conn.Read(buf[0:pkgLen])
+	// 根据pkgLen读取消息内容
+	n, err := conn.Read(buf[:pkgLen])
 	if uint32(n) != pkgLen || err != nil {
-		response.ErrorMsg = err.Error()
-		response.ErrorCode = 500
-		return response, errors.New("conn.Read 数据包出错")
+		return
 	}
-
-	// 将buf[0:pkgLen] 反序列化
-	requestMsg := message.Message{}
-	err = json.Unmarshal(buf[0:pkgLen], &requestMsg)
+	err = json.Unmarshal(buf[:pkgLen], &msg)
 	if err != nil {
-		response.ErrorMsg = err.Error()
-		response.ErrorCode = 500
-		return response, errors.New("反序列化buf[0:pkgLen]出错")
+		return
 	}
-	switch requestMsg.Type {
-	case message.LoginMsgType:
-		loginMsg := message.LoginMsg{}
-		err = json.Unmarshal([]byte(requestMsg.Data), &loginMsg)
-		if err != nil {
-			response.ErrorMsg = err.Error()
-			response.ErrorCode = 500
-			return response, errors.New("反序列化requestMsg.Data出错")
-		}
-		if loginMsg.UserId == 12345 && loginMsg.UserPwd == "abc" {
-			response.ErrorCode = 0
-			response.ErrorMsg = "success"
-			return response, nil
-		} else {
-			response.ErrorCode = 1
-			response.ErrorMsg = "用户名或密码错误"
-			return response, nil
-		}
-	default:
-		response.ErrorMsg = "未知类型"
-		response.ErrorCode = 500
-		// 自定义错误
-
-		return response, errors.New("类型有误")
-	}
+	return
 }
 
-func process(conn net.Conn, ) {
+// 编写一个函数serverProcessLogin函数,专门处理登录请求
+func serverProcessLogin(conn net.Conn, msg *message.Message) (err error) {
+
+	// 核心代码
+	// 1. 先从msg中取出msg.Data,并直接反序列化成LoginMsg
+	loginMsg := message.LoginMsg{}
+
+	err = json.Unmarshal([]byte(msg.Data), &loginMsg)
+	if err != nil {
+		return
+	}
+
+	// 声明一个responseMsg
+	var responseMsg message.Message
+	responseMsg.Type = message.LoginResMsgType
+
+	// 再声明一个 LongResMsg
+	loginResMsg := message.LoginResMsg{}
+
+	// 如果用户id 为100,密码=123456 ,认为合法否则不合法
+	if loginMsg.UserId == 100 && loginMsg.UserPwd == "123456" {
+		// 登录成功返回200状态码
+		loginResMsg.ErrorCode = 200
+		loginResMsg.ErrorMsg = "success"
+	} else {
+		// 登录错误返回500错误码
+		loginResMsg.ErrorCode = 500
+		loginResMsg.ErrorMsg = "用户不存在"
+	}
+
+	// 序列化一下
+	loginResMsgJson, err := json.Marshal(loginResMsg)
+
+	if err != nil {
+		return
+	}
+
+	// 赋值给responseMsg
+	responseMsg.Data = string(loginResMsgJson)
+
+	// 对responseMsg 序列化
+	responseMsgJson, err := json.Marshal(responseMsg)
+	if err != nil {
+		return
+	}
+
+	// 发送responseMsgJson数据，将他封装成到一个writePkg()函数
+	err = writePkg(conn, responseMsgJson)
+	return
+}
+
+// 发送数据包函数.
+func writePkg(conn net.Conn, data []byte) (err error) {
+	// 先发送一个长度给对方
+	var pkgLen uint32
+	pkgLen = uint32(len(data))
+
+	// 将一个int 转成字节切片
+	var buf [4]byte
+	binary.BigEndian.PutUint32(buf[:4], pkgLen)
+	n, err := conn.Write(buf[0:4])
+	if n != 4 || err != nil {
+		fmt.Println("conn.Write(buf[0:4]) error", err)
+		return
+	}
+
+	// 发送数据本身
+	writeDataLen, err := conn.Write(data)
+	if uint32(writeDataLen) != pkgLen || err != nil {
+		fmt.Println("conn.Write(data) error", err)
+		return
+	}
+	return
+
+}
+
+// 编写一个ServerProcessMsg 函数
+// 功能：根据客户端发送的消息种类不同,决定调用哪个函数来处理.
+
+func serverProcessMsg(conn net.Conn, msg *message.Message) (err error) {
+	switch msg.Type {
+	// 登录请求
+	case message.LoginMsgType:
+		err = serverProcessLogin(conn, msg)
+		break
+	case message.RegisterMsgType:
+		break
+	default:
+		return errors.New("消息类型不存在")
+	}
+	return
+}
+
+func process(conn net.Conn) {
 
 	defer conn.Close()
 	//buf := make([]byte, 8096)
@@ -83,6 +142,11 @@ func process(conn net.Conn, ) {
 			return
 		}
 		fmt.Println(msg)
+		err = serverProcessMsg(conn, &msg)
+		if err != nil {
+			fmt.Println("serverProcessMsg error=",err)
+			return
+		}
 		//n, err := conn.Read(buf[0:4])
 		//if n !=4 || err != nil {
 		//	if err == io.EOF {
