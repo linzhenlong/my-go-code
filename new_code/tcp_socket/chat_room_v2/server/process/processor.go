@@ -1,10 +1,9 @@
-package main
+package process
 
 import (
 	"errors"
 	"fmt"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/common/message"
-	process2 "github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/process"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/utils"
 	"net"
 )
@@ -16,7 +15,7 @@ func serverProcessMsg(conn net.Conn, msg *message.Message) (err error) {
 	switch msg.Type {
 	// 登录请求
 	case message.LoginMsgType:
-		err = process2.ServerProcessLogin(conn, msg)
+		err = ServerProcessLogin(conn, msg)
 		break
 	case message.RegisterMsgType:
 		break
@@ -26,7 +25,8 @@ func serverProcessMsg(conn net.Conn, msg *message.Message) (err error) {
 	return
 }
 
-func process(conn net.Conn) {
+
+func Process(conn net.Conn) {
 
 	defer conn.Close()
 	//buf := make([]byte, 8096)

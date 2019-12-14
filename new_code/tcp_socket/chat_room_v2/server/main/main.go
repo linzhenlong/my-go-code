@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/process"
 	"net"
 )
-
 
 func main() {
 	fmt.Println("服务器在8889端口监听.....")
@@ -28,6 +28,6 @@ func main() {
 
 		// 链接成功，启协程和客户端保持数据通讯
 
-		go process(conn)
+		go process.Process(conn)
 	}
 }
