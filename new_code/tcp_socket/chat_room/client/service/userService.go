@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room/client/model"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room/client/utils"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room/common/message"
 	"net"
 )
@@ -77,6 +78,27 @@ func (u *UserService) Login() error  {
 	if err !=nil {
 		fmt.Println("conn.Write 失败 requestLen=",requestLen,"err=",err)
 		return nil
+	}
+
+	// 获取服务端响应的消息
+	responseMsg , err := utils.ReadPkg(conn)
+	if err != nil {
+		fmt.Println("utils.ReadPkg(conn) error=",err)
+		return err
+	}
+
+	// 将responseMsg的data部分反序列成LoginResMsg
+	loginResMsg := message.LoginResMsg{}
+	err = json.Unmarshal([]byte(responseMsg.Data), &loginResMsg)
+	if err != nil {
+		fmt.Println("responseMsg.Data 反序列化出错，error=", err)
+		return err
+	}
+
+	if loginResMsg.ErrorCode == 200 {
+		fmt.Println("登录成功")
+	} else {
+		fmt.Println(loginResMsg.ErrorMsg)
 	}
 
 	return nil

@@ -16,7 +16,7 @@ type Message struct {
 type LoginMsg struct {
 	UserId int `json:"user_id"`
 	UserPwd string `json:"user_pwd"`
-	UserName string `json:"user_name"`
+	//UserName string `json:"user_name"`
 }
 
 // 登录服务端返回消息
