@@ -7,8 +7,13 @@ import (
 	"net"
 )
 
+type UserProcess struct {
+	Conn net.Conn
+}
+
+
 // 编写一个函数serverProcessLogin函数,专门处理登录请求
-func ServerProcessLogin(conn net.Conn, msg *message.Message) (err error) {
+func (userProcess *UserProcess)ServerProcessLogin(msg *message.Message) (err error) {
 
 	// 核心代码
 	// 1. 先从msg中取出msg.Data,并直接反序列化成LoginMsg
@@ -54,6 +59,14 @@ func ServerProcessLogin(conn net.Conn, msg *message.Message) (err error) {
 	}
 
 	// 发送responseMsgJson数据，将他封装成到一个writePkg()函数
-	err = utils.WritePkg(conn, responseMsgJson)
+
+	// 创建一个transfer 实例去实现写包操作
+	transfer := &utils.Transfer{
+		Conn:userProcess.Conn,
+	}
+	err = transfer.WritePkg(responseMsgJson)
+	if err != nil {
+		return
+	}
 	return
 }

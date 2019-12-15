@@ -6,6 +6,20 @@ import (
 	"net"
 )
 
+func handle(conn net.Conn)  {
+	defer conn.Close()
+
+	// 实例化processor
+	processor := &process.Processor{
+		Conn:conn,
+	}
+	err := processor.Handle()
+	if err != nil {
+		fmt.Println("processor.Process() error=", err)
+		return
+	}
+}
+
 func main() {
 	fmt.Println("服务器在8889端口监听.....")
 
@@ -28,6 +42,6 @@ func main() {
 
 		// 链接成功，启协程和客户端保持数据通讯
 
-		go process.Process(conn)
+		go handle(conn)
 	}
 }
