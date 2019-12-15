@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/common/message"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/utils"
+	"io"
 	"net"
 )
 
@@ -34,7 +35,7 @@ func (processor *Processor)serverProcessMsg(msg *message.Message) (err error) {
 }
 
 
-func (processor *Processor)Handle() (err error){
+func (processor *Processor)Process() (err error){
 
 
 	//buf := make([]byte, 8096)
@@ -48,7 +49,12 @@ func (processor *Processor)Handle() (err error){
 		}
 		msg, err := transfer.ReadPkg()
 		if err != nil {
-			return err
+			if err == io.EOF {
+				fmt.Println("客户端断开链接")
+				return nil
+			} else {
+				return err
+			}
 		}
 		fmt.Println(msg)
 		err = processor.serverProcessMsg(&msg)

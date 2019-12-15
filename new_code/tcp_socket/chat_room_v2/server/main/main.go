@@ -13,7 +13,7 @@ func handle(conn net.Conn)  {
 	processor := &process.Processor{
 		Conn:conn,
 	}
-	err := processor.Handle()
+	err := processor.Process()
 	if err != nil {
 		fmt.Println("processor.Process() error=", err)
 		return
