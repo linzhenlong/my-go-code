@@ -23,24 +23,28 @@ func main()  {
 		msg["error_code"] = 0
 		msg["error_msg"] = "success";
 		writer.Header().Set("Content-Type", "application/json;charset=utf-8")
-		s, _ := json.Marshal(msg)
 		fmt.Println(request.RemoteAddr)
 		fmt.Println(request.Host)
 		fmt.Println(request.RequestURI)
 		fmt.Println(request.UserAgent())
 		fmt.Println(request.URL.Query())
 		query, _ := url.ParseQuery(request.URL.RawQuery)
-		if query == nil {
+		fmt.Println(query)
+		if len(query) != 0 {
+			userid := query["user_id"][0]
+			username := query["user_name"][0]
+			user := User{
+				Uid:  userid,
+				Name: username,
+			}
+
+			msg["data"] = user
+		} else {
+			fmt.Println("xxxxxx")
 			msg["error_code"] = 1
 			msg["error_msg"] = "userid 不能为空"
 		}
-		userid := query["user_id"][0]
-		username := query["user_name"][0]
-		user := User{
-			Uid:userid,
-			Name:username,
-		}
-		msg["data"] = user
+		s, _ := json.Marshal(msg)
 
 		writer.Write(s)
 
