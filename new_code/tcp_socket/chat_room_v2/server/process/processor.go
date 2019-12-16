@@ -62,6 +62,5 @@ func (processor *Processor)Process() (err error){
 			fmt.Println("serverProcessMsg error=", err)
 			return err
 		}
-
 	}
 }
