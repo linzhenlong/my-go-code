@@ -8,16 +8,15 @@ import (
 
 var (
 	Key int // 用户输入选择
-	//IsExit bool // 是否退出
+	IsExit bool // 是否退出
 
 	UserId int
 	UserPassword string
 )
 func main()  {
-
-	//var loop bool
-	//loop = true
-	//for loop {
+	var loop bool
+	loop = true
+	for loop {
 		fmt.Println("---------欢迎登录多人聊天系统--------")
 		fmt.Println("-------------1:登录聊天室--------")
 		fmt.Println("-------------2:注册用户--------")
@@ -35,9 +34,8 @@ func main()  {
 
 
 			userProcess := &process.UserProcess{}
-			err := userProcess.Login(UserId, UserPassword)
+			_ = userProcess.Login(UserId, UserPassword)
 
-			fmt.Println("login() error=",err)
 			//loop = false
 		case 2:
 			fmt.Println("用户注册")
@@ -48,7 +46,7 @@ func main()  {
 		default:
 			fmt.Println("输入有误,请选择（1-3）")
 		}
-	//}
+	}
 }
 
 

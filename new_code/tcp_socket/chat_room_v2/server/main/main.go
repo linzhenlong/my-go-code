@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/model"
 	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/process"
 	"net"
+	"time"
 )
 
 func handle(conn net.Conn)  {
@@ -20,6 +22,19 @@ func handle(conn net.Conn)  {
 	}
 }
 
+func initUserDao() {
+	model.MyUserDao = model.NewUserDao(pool)
+}
+
+// 初始化redis链接
+func init()  {
+
+	// 初始化redis.
+	initPool("127.0.0.1:6379",8,10,time.Second*100)
+
+	// 初始化userDAO
+	initUserDao()
+}
 func main() {
 	fmt.Println("服务器在8889端口监听.....")
 

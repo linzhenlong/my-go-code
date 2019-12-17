@@ -97,15 +97,16 @@ func (userProcess *UserProcess)Login(userId int ,userPassword string) (err error
 
 		// 起一个协程保持与服务端通讯
 		go KeyServerConnect(conn)
+
 		for {
 			LoginSuccessView()
 		}
 
 
-
 	} else {
-		fmt.Println(loginResMsg.ErrorMsg)
+		fmt.Println("【错误信息】",loginResMsg.ErrorMsg)
 	}
+
 	return
 }
 
