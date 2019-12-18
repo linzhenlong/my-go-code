@@ -89,3 +89,71 @@ func (userProcess *UserProcess) ServerProcessLogin(msg *message.Message) (err er
 	}
 	return
 }
+
+func (UserProcess *UserProcess)ServerProcessRegister(msg *message.Message)(err error) {
+
+	// 解析消息
+	registerMsg := message.RegisterMsg{}
+	fmt.Println(msg.Data)
+	err = json.Unmarshal([]byte(msg.Data),&registerMsg)
+
+	if err != nil {
+		fmt.Println("json.Unmarshal([]byte(msg.Data),&registerRequestMsg) error = ", err)
+		return
+	}
+	user := model.User{
+		UserPwd:registerMsg.User.UserPwd,
+		UserId:registerMsg.User.UserId,
+		UserName:registerMsg.User.UserName,
+	}
+
+	// 完成注册
+	// 实例化
+
+	status,err := model.MyUserDao.Register(user)
+
+	//声明一个注册信息的response
+	registerResponseMsg := message.RegisterResMsg{}
+	if err != nil {
+		if err == model.ERROR_USER_EXISTS {
+			registerResponseMsg.ErrorCode = 500
+		} else if err == model.ERROR_WRITE_REDIS {
+			registerResponseMsg.ErrorCode = 501
+		} else if err == model.ERROR_NO_USER_ID_PWD {
+			registerResponseMsg.ErrorCode = 502
+		} else {
+			registerResponseMsg.ErrorCode = 400
+		}
+		registerResponseMsg.ErrorMsg = err.Error()
+	} else {
+		if status {
+			registerResponseMsg.ErrorCode = 200
+			registerResponseMsg.ErrorMsg = "success"
+		} else {
+			registerResponseMsg.ErrorCode = 300
+			registerResponseMsg.ErrorMsg = "注册失败未知原因"
+		}
+	}
+	responseDataByte , err := json.Marshal(registerResponseMsg)
+	if err != nil {
+		fmt.Println("json.Marshal(registerResponseMsg) error=", err)
+		return
+	}
+
+	responseMsg := message.Message{}
+	responseMsg.Type = message.RegisterResMsgType
+	responseMsg.Data = string(responseDataByte)
+
+	responseByte , err := json.Marshal(responseMsg)
+	if err != nil {
+		fmt.Println("json.Marshal(responseMsg) error=", err)
+		return
+	}
+	// 写包
+	transfer := utils.Transfer{
+		Conn:UserProcess.Conn,
+	}
+	return transfer.WritePkg(responseByte)
+
+
+}

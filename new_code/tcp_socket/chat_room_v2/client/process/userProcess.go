@@ -138,3 +138,70 @@ func LoginSuccessView() {
 		}
 
 }
+
+func (userProcess *UserProcess)Register(userId int, userPassword ,userName string) (err error) {
+
+	conn, err := net.Dial("tcp", "127.0.0.1:8889")
+	defer conn.Close()
+	if err != nil {
+		fmt.Println("net.Dial(\"tcp\", \"127.0.0.1:8889\") error=", err)
+		return err
+	}
+
+	// 组装数据
+	user := message.User{
+		UserId:userId,
+		UserName:userName,
+		UserPwd:userPassword,
+	}
+	registerMsg := message.RegisterMsg{
+		User:user,
+	}
+
+	// 序列化
+	registerMsgByte , err := json.Marshal(registerMsg)
+	if err != nil {
+		fmt.Println("json.Marshal(registerMsg) error=", err)
+		return err
+	}
+	requestMsg := message.Message{
+		Type:message.RegisterMsgType,
+		Data:string(registerMsgByte),
+	}
+
+	// 序列化
+	requestMsgByte , err := json.Marshal(requestMsg)
+	if err != nil {
+		fmt.Println("json.Marshal(registerMsg) error=", err)
+		return err
+	}
+	// 写包
+	transfer := utils.Transfer{
+		Conn:conn,
+	}
+	err = transfer.WritePkg(requestMsgByte)
+
+	fmt.Println(err,string(registerMsgByte))
+
+	// 读包获取注册是否成功
+
+	responseMsg , err := transfer.ReadPkg()
+	if err != nil {
+		fmt.Println("transfer.ReadPkg()", err)
+		return err
+	}
+
+	//声明一个注册信息的response
+	registerResponseMsg := message.RegisterResMsg{}
+
+	err = json.Unmarshal([]byte(responseMsg.Data), &registerResponseMsg)
+	if err != nil {
+		fmt.Println("注册出错了，ERROR=",err)
+	}
+	if registerResponseMsg.ErrorCode == 200 {
+		fmt.Println("注册成功"+registerResponseMsg.ErrorMsg)
+	} else {
+		fmt.Println("注册失败"+"【"+registerResponseMsg.ErrorMsg+"】")
+	}
+	return
+}

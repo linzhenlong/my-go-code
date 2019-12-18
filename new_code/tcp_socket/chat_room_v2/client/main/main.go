@@ -12,6 +12,7 @@ var (
 
 	UserId int
 	UserPassword string
+	UserName string
 )
 func main()  {
 	var loop bool
@@ -38,7 +39,17 @@ func main()  {
 
 			//loop = false
 		case 2:
-			fmt.Println("用户注册")
+			fmt.Println("注册新用户~~")
+			fmt.Println("请输入用户id:")
+			fmt.Scanf("%d\n", &UserId)
+			fmt.Println("请输入用户密码:")
+			fmt.Scanf("%s\n", &UserPassword)
+			fmt.Println("请输入用户名:")
+			fmt.Scanf("%s\n", &UserName)
+
+			// 调用userProcess 完成注册请求
+			userProcess := &process.UserProcess{}
+			_ = userProcess.Register(UserId, UserPassword, UserName)
 			//loop = false
 		case 3:
 			fmt.Println("退出系统")
