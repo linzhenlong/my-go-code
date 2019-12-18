@@ -197,6 +197,7 @@ func (userProcess *UserProcess)Register(userId int, userPassword ,userName strin
 	err = json.Unmarshal([]byte(responseMsg.Data), &registerResponseMsg)
 	if err != nil {
 		fmt.Println("注册出错了，ERROR=",err)
+		return 
 	}
 	if registerResponseMsg.ErrorCode == 200 {
 		fmt.Println("注册成功"+registerResponseMsg.ErrorMsg)
