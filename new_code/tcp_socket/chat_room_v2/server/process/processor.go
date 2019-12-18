@@ -27,6 +27,11 @@ func (processor *Processor)serverProcessMsg(msg *message.Message) (err error) {
 		err = userProcess.ServerProcessLogin(msg)
 		break
 	case message.RegisterMsgType:
+		// 创建userProcess 实例
+		userProcess := &UserProcess{
+			Conn:processor.Conn,
+		}
+		err = userProcess.ServerProcessRegister(msg)
 		break
 	default:
 		return errors.New("消息类型不存在")
@@ -62,6 +67,5 @@ func (processor *Processor)Process() (err error){
 			fmt.Println("serverProcessMsg error=", err)
 			return err
 		}
-
 	}
 }

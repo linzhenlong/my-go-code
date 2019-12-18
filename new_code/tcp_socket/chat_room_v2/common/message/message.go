@@ -4,6 +4,7 @@ const (
 	LoginMsgType = "loginRequest"
 	LoginResMsgType = "loginResponse"
 	RegisterMsgType = "register"
+	RegisterResMsgType = "RegisterResMsg"
 )
 
 type Message struct {
@@ -27,7 +28,11 @@ type LoginResMsg struct {
 
 // 注册信息.
 type RegisterMsg struct {
-	UserId int `json:"user_id"`
-	UserPwd string `json:"user_pwd"`
-	UserName string `json:"user_name"`
+	User User `json:"user"`
+}
+
+// 注册的响应信息
+type RegisterResMsg struct {
+	ErrorCode int  `json:"error_code"`// 返回状态码，200成功,等等...
+	ErrorMsg string `json:"error_msg"`
 }
