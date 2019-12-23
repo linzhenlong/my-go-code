@@ -11,6 +11,9 @@ import (
 
 type UserProcess struct {
 	Conn net.Conn
+
+	// 增加有关字段表示，该Coon 是哪个用户的
+	UserId int
 }
 
 // 编写一个函数serverProcessLogin函数,专门处理登录请求
