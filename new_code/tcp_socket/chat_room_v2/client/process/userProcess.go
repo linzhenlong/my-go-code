@@ -92,8 +92,15 @@ func (userProcess *UserProcess)Login(userId int ,userPassword string) (err error
 		fmt.Println("responseMsg.Data 反序列化出错，error=", err)
 		return err
 	}
-
+	fmt.Println(loginResMsg)
 	if loginResMsg.ErrorCode == 200 {
+
+		// 显示当前在线用户列表
+
+		fmt.Println("当前在线用户id:")
+		for _, v := range loginResMsg.UserIds {
+			fmt.Println("用户id:",v)
+		}
 
 		// 起一个协程保持与服务端通讯
 		go KeyServerConnect(conn)

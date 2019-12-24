@@ -17,7 +17,7 @@ type UserProcess struct {
 }
 
 // 编写一个函数serverProcessLogin函数,专门处理登录请求
-func (userProcess *UserProcess) ServerProcessLogin(msg *message.Message) (err error) {
+func (UserProcess *UserProcess) ServerProcessLogin(msg *message.Message) (err error) {
 
 	// 核心代码
 	// 1. 先从msg中取出msg.Data,并直接反序列化成LoginMsg
@@ -49,8 +49,20 @@ func (userProcess *UserProcess) ServerProcessLogin(msg *message.Message) (err er
 		}
 		loginResMsg.ErrorMsg = err.Error()
 	} else {
+
+		// 用户登录成功，把用户登录成功的信息放到userMgr中
+		// 将登录成功的用户id 赋值给userProcess
+		UserProcess.UserId = loginMsg.UserId
+		userMgr.AddOnlineUser(UserProcess)
+
+		// 将当前登录用户id 放到logResMsg.UserIds里面
+		// 遍历userMgr里面的onlineUsers
+		for userId,_ := range userMgr.onlineUsers {
+			loginResMsg.UserIds = append(loginResMsg.UserIds, userId)
+		}
 		loginResMsg.ErrorCode = 200
 		loginResMsg.ErrorMsg = "success"
+		//loginResMsg.UserIds = append(loginResMsg.UserIds, loginMsg.UserId)
 	}
 
 	/*// 如果用户id 为100,密码=123456 ,认为合法否则不合法
@@ -84,7 +96,7 @@ func (userProcess *UserProcess) ServerProcessLogin(msg *message.Message) (err er
 
 	// 创建一个transfer 实例去实现写包操作
 	transfer := &utils.Transfer{
-		Conn: userProcess.Conn,
+		Conn: UserProcess.Conn,
 	}
 	err = transfer.WritePkg(responseMsgJson)
 	if err != nil {

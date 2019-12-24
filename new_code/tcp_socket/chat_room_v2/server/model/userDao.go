@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"github.com/linzhenlong/my-go-code/new_code/tcp_socket/chat_room_v2/server/utils"
 )
 
 // 声明一个全局的变量
@@ -58,7 +59,7 @@ func (userDao *userDao)Login(userId int, userPwd string) (user *User ,err error)
 	}
 
 	// 校验密码
-	if user.UserPwd != userPwd {
+	if user.UserPwd != utils.GenMd5(userPwd) {
 		err = ERROR_USER_PWD
 		return
 	}
@@ -106,10 +107,10 @@ func (userDao *userDao)addUser(user User)(bool, error) {
 		return false, err
 	}
 
+	user.UserPwd = utils.GenMd5(user.UserPwd)
 	// redis 链接
 	conn := userDao.pool.Get()
 	defer conn.Close()
-
 
 	userByte, err := json.Marshal(user)
 	if err != nil {

@@ -24,6 +24,7 @@ type LoginMsg struct {
 type LoginResMsg struct {
 	ErrorCode int  `json:"error_code"`// 返回状态码，200成功,等等...
 	ErrorMsg string `json:"error_msg"`
+	UserIds []int `json:"user_ids"`  // 在线用户id的切片
 }
 
 // 注册信息.
