@@ -127,7 +127,7 @@ func main() {
 	// 获取命令行参数
 	total := flag.Int("total", 50000, "抓取行数")
 	filePath := flag.String("filePath", "/data/log/tongji_access.log", "文件路径")
-	routineNum := flag.Int("routineNum", 100, "routineNum")
+	routineNum := flag.Int("routineNum", 10, "routineNum")
 	flag.Parse()
 
 	runChannel := make(chan int, *routineNum)
