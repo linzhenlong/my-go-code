@@ -1,20 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/go-redis/redis"
+)
 
-func main()  {
-	c();
-}
-func c()  {
-	fmt.Println("redis")
-}
+func main() {
 
-/*func c()*redis.Client  {
-	client := redis.NewClient(&redis.Options{
-		Addr:"127.0.0.1",
-		Password:"",
-		DB:0,
+	redisCli := *redis.NewClient(&redis.Options{
+		Addr:    "127.0.0.1:6379",
+		Network: "tcp",
 	})
-	fmt.Printf("%v",client);
-}*/
+
+	ret ,_:= redisCli.PFAdd("hll", "z").Result()
+	fmt.Println(ret)
+
+	r2, _ := redisCli.ZIncrBy("lzl1",10,"tom").Result()
+	fmt.Println(r2)
+}
+
+
+
+
 

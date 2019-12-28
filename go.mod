@@ -6,6 +6,8 @@ require (
 	github.com/garyburd/redigo v1.6.0
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/gomodule/redigo v2.0.0+incompatible
+	github.com/mediocregopher/radix/v3 v3.4.2 // indirect
+	github.com/mgutz/str v1.2.0 // indirect
 	github.com/onsi/ginkgo v1.10.3 // indirect
 	github.com/onsi/gomega v1.7.1 // indirect
 	github.com/pkg/errors v0.8.1
