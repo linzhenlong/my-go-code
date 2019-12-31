@@ -10,12 +10,12 @@ import (
 
 
 
-var log = &logrus.Logger{}
+var MyLog = &logrus.Logger{}
 
 func init()  {
-	log.Out = os.Stdout
-	log.Level = logrus.DebugLevel
-	log.Formatter = &logrus.TextFormatter{
+	MyLog.Out = os.Stdout
+	MyLog.Level = logrus.DebugLevel
+	MyLog.Formatter = &logrus.TextFormatter{
 		ForceColors:true,
 		FullTimestamp:true,
 		TimestampFormat:"2006-01-02 15:04:05.000",
@@ -47,9 +47,9 @@ func main() {
 	r := UserHandlers()
 
 
-	log.Infof("监听8889端口")
+	MyLog.Infof("监听8889端口")
 	err := http.ListenAndServe("0.0.0.0:8889",r)
 	if err !=nil {
-		log.Errorf("http.ListenAndServe 8889 端口 error= ", err)
+		MyLog.Errorf("http.ListenAndServe 8889 端口 error= ", err)
 	}
 }

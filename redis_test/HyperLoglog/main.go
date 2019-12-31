@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/sirupsen/logrus"
 	"os"
+	"time"
 )
 
 /**
@@ -47,7 +48,8 @@ func main() {
 	log.Infof("用户数:%d",*userNum)
 
 	redisClient := CreateRedis()
-	redisClient.Del("hll:users")
+	f, _ := redisClient.Del("hll:users").Result()
+	log.Infof("redisClient.Del", f)
 	for i:=1;i<=*userNum;i++ {
 		r , err := redisClient.PFAdd("hll:users",i).Result()
 		if err != nil {
@@ -62,5 +64,5 @@ func main() {
 			log.Infof("pfcount=%d,i=%d,r=%d, 差值:%d,概率%f",count,i,r, cha,rate)
 		}
 	}
-
+	time.Sleep(time.Second * 100)
 }
