@@ -3,6 +3,7 @@ package dbops
 import "testing"
 
 
+var tempUUID string
 
 // 初始化测试用例
 // 1.清空数据
@@ -14,9 +15,10 @@ func TestMain(m *testing.M)  {
 	clearTables()
 }
 
+
 // 清空数据
 func clearTables() {
-	dbConn.Exec("truncate user")
+	dbConn.Exec("truncate users")
 	dbConn.Exec("truncate video_info")
 	dbConn.Exec("truncate comments")
 	dbConn.Exec("truncate sessions")
@@ -54,17 +56,53 @@ func TestDeleteUser(t *testing.T) {
 	//t.SkipNow()
 	err := DeleteUser("linzl", "123456")
 	if err != nil {
-		t.Errorf("Error of DeleteUser error=%v",err)
+		t.Fatalf("Error of DeleteUser error=%v",err)
 	}
 }
 
 func TestReGetUser(t *testing.T)  {
 	pwd, err := GetUserCredential("linzl")
 	if err != nil {
-		t.Errorf("Error of GetUserCredential error=%v",err)
+		t.Fatalf("Error of GetUserCredential error=%v",err)
 	}
 	t.Log(pwd)
 	if len(pwd) != 0 {
-		t.Errorf("Error of TestDeleteUser error=%v",pwd)
+		t.Fatalf("Error of TestDeleteUser error=%v",pwd)
 	}
+}
+
+func TestVidoFlow(t *testing.T)  {
+	t.Run("addVideo", TestAddVideo)
+	t.Run("getVideo", TestGetVideoIno)
+	t.Run("delVideo", TestDeleteVideo)
+	t.Run("reGetVideo",TestGetVideoIno)
+}
+
+func TestAddVideo(t *testing.T)  {
+	res, err := AddNewVideo(1,"MY-Video")
+	if err != nil {
+		t.Fatalf("AddNewVideo error=%s", err.Error())
+	}
+	if res == nil {
+		t.Fatalf("AddNewVideo res error%v", res)
+	}
+	tempUUID = res.UUID
+	t.Log("TestAddVideo",res,tempUUID)
+}
+
+func TestGetVideoIno(t *testing.T)  {
+	t.Log("TestGetVideoIno uuid==>",tempUUID)
+	res, err := GetVidoInfo(tempUUID)
+	if err != nil {
+		t.Fatalf("TestGetVideoIno error=%s", err.Error())
+	}
+	t.Logf("TestGetVideoIno:%v",res)
+}
+
+func TestDeleteVideo(t *testing.T)  {
+	err := DeleteVideo(tempUUID)
+	if err != nil {
+		t.Logf("TestDeleteVideo error=%s", err.Error())
+	}
+	t.Log("TestDeleteVideo succ")
 }
