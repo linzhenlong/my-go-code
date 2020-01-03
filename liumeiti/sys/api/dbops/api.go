@@ -105,7 +105,7 @@ func GetVidoInfo(uuid string) (videoInfo *defs.VideoInfo, err error)  {
 	if err!= nil && err !=sql.ErrNoRows {
 		return
 	}
-
+	
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
