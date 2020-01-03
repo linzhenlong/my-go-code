@@ -1,6 +1,8 @@
 package dbops
 
 import "testing"
+import "strconv"
+import "time"
 
 
 var tempUUID string
@@ -105,4 +107,43 @@ func TestDeleteVideo(t *testing.T)  {
 		t.Logf("TestDeleteVideo error=%s", err.Error())
 	}
 	t.Log("TestDeleteVideo succ")
+}
+
+func TestComments(t *testing.T) {
+	clearTables()
+	// 添加一个用户,联查用
+	t.Run("TestCommentsAddUser", TestAddUser)
+	// 添加一个视频
+	t.Run("TestCommentsAddVideo", TestAddVideo)
+	// 添加一条评论
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)
+	t.Run("TestAddComment", TestAddComment)	
+	t.Run("TestListComments", TestListComments)	
+}
+
+func TestAddComment(t *testing.T) {
+	err := AddNewComments(tempUUID, 1, "TestAddComment"+strconv.Itoa(int(time.Now().UnixNano())))
+	if err != nil {
+		t.Fatalf("TestAddComment error =%s", err.Error())
+	}
+	t.Log("TestAddComment succ")
+}
+
+func TestListComments(t *testing.T) {
+	res, err := CommentsList(tempUUID, 0, 20)
+	if err != nil {
+		t.Logf("TestListComments error=%s",err)
+	}
+	for i,v := range res {
+		t.Log(i,v)
+	}
 }
