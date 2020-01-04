@@ -28,7 +28,7 @@ var Keywords = []string{
 }
 // genData 生成数据.
 func genData(data chan Article,genChan chan int) {
-	for i:=0;i<100;i++ {
+	for i:=0;i<10000;i++ {
 		rand.Seed(time.Now().UnixNano())
 		ruleID := rand.Int31n(10000)
 
@@ -71,22 +71,7 @@ func lpushData(data chan Article, finshed chan int) {
 		}
 		fmt.Println("lpushData",n)
 	}
-	/* for article := range data {
-		
-		res,err := json.Marshal(article)
-		if err != nil {
-			fmt.Println(err)
-			break
-		}
-		_ , err = redisClient.LPush("article_list",string(res)).Result()
-		if err != nil {
-			fmt.Println("lpushData LPush ERROR", err.Error())
-			break
-		}
-		//fmt.Println("lpushData",err,n)
-	} */
 	finshed <- 1
-	
 }
 
 func init() {
@@ -95,13 +80,13 @@ func init() {
 
 func main() {
 
-	routineNum := flag.Int("routineNum", 10, "携程数")
+	routineNum := flag.Int("routineNum", 5, "携程数")
 	flag.Parse()
 	fmt.Println("携程数",*routineNum)
 	
 	
 	// 生成数据
-	var dataChan = make(chan Article, 10000)
+	var dataChan = make(chan Article)
 	var genChan = make(chan int, *routineNum)
 	for i:=0;i<*routineNum;i++ {
 		go genData(dataChan, genChan)
