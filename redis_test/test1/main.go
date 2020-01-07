@@ -1,22 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"github.com/garyburd/redigo/redis"
-)
-func main()  {
-	c, err := redis.Dial("tcp","127.0.0.1:6379")
+import "fmt"
 
-	if err !=nil {
-		fmt.Println("链接失败")
-		return
+func main() {
+	var  i,a int
+	for a < 5 {
+		for i := 0; i < 5; i++ {
+			fmt.Println(i)
+		}
+		fmt.Println("for 循环外", i)
+		a++
 	}
-	defer c.Close()
-
-	_,err = c.Do("SET", "lzl_test", "111");
-
-	lzl_test,err := redis.String(c.Do("GET","lzl_test"))
-	fmt.Println(lzl_test)
-
 }
-
