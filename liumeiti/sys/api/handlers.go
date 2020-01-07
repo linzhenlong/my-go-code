@@ -18,10 +18,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
 	r.ParseForm()
 	MyLog.Debug("PostFormValue user_name",r.Form["user_name"])
 	MyLog.Debug("PostFormValue pwd",r.PostFormValue("pwd"))
+	
+	MyLog.Info("r.Form",r.PostForm.Get("user_name"))
 	MyLog.Info("CreateUser res=", string(res))
 	uBody := &defs.UserCredential{}
 	MyLog.Info("uBody=", uBody)
-	// 这块普通的http Post HEAD 是Content-Type:[multipart/form-data json解析有问题.
+	// 这块普通的http Post HEAD 是Content-Type:[multipart/form-data json解析有问题. 
 	if err := json.Unmarshal(res, &uBody); err !=nil {
 		MyLog.Info("json.Unmarshal(res, uBody)", uBody)
 		MyLog.Info("json.Unmarshal(res, uBody) error", err)

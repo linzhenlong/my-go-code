@@ -10,6 +10,7 @@ require (
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mgutz/str v1.2.0
+	github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836 // indirect
 	github.com/onsi/ginkgo v1.10.3 // indirect
 	github.com/onsi/gomega v1.7.1 // indirect
 	github.com/pkg/errors v0.8.1
