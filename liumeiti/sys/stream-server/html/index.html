@@ -1,0 +1,23 @@
+<html>
+    
+    <head>上传文件</head>
+    <title>上传文件</title>
+    <body>
+        <form id="form1" enctype="multipart/form-data" method="post" action="http://127.0.0.1:8888/upload/{{.}}">
+            <div class="row">
+                <label for="fileToUpload">上传文件</label><br>
+                <input type="file" name="file" id="" >
+            </div>
+            <div id="fileName"></div>
+            <div id="fileSize"></div>
+            <div id="fileType"></div>
+            <div class="row">
+               <BUtton type="submit">上传</BUtton>
+            </div>
+            <div id="progressNumber"></div>
+        </form>
+    </body>
+</html>
+
+
+

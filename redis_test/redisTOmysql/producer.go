@@ -33,7 +33,7 @@ var wg sync.WaitGroup
 // genData 生成数据.
 func genData(data chan Article) {
 	for j := 0; j < 5; j++ {
-		for i := 0; i < 100; i++ {
+		for i := 0; i < 100000; i++ {
 			rand.Seed(time.Now().UnixNano())
 			ruleID := rand.Int31n(10000)
 
