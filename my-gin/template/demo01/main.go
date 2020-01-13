@@ -35,6 +35,3 @@ func main() {
 	}
 
 }
-
-//https://www.bilibili.com/video/av78578060
-// 【Go Web开发系列教程】04-Go template模板初识

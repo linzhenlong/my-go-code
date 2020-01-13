@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello</title>
+</head>
+<body>
+   <p>{{.person}}</p>
+   <p>我是:{{.person.Name}}</p>
+   <p>年龄:{{.person.Age}}</p>
+    <p>{{.myMap}}</p>
+   <p>我是:{{.myMap.person1.Name}}</p>
+   <p>年龄:{{.myMap.person1.Age}}</p>
+    <hr>
+   {{/* 这是注释哈哈哈哈哈哈*/}}
+    <hr>
+   {{/* 下面定义一个变量*/}}
+   {{$v := 20}}
+   <p>自定义变量:{{$v}}</p>
+  
+  {{/*移除.person.Name 中的前后空格*/}}
+  <p>带空格的:{{.person.Name}}</p>
+  <p>移除空格的:{{- .person.Name -}}</p>
+
+  <hr>
+  {{/*条件判断相关的*/}}
+  {{if $v}}
+  <p>$v:{{$v}}</p>
+  {{else}} 
+  <p>啥都没有</p>
+  {{end}}
+  <p>我是:{{.person.Name}}</p>
+   <p>年龄:{{.person.Age}} {{ if ge .person.Age $v }}我成年了{{else}}我未成年{{end}}</p>
+  <hr>
+  {{/* range 相关*/}}
+  {{ range $idx,$hobby := .hobby }}
+  <li>{{ $idx }}-----{{ $hobby }}</li>
+  {{else}}
+  <li>啥爱好都木有</li>
+  {{end}}
+
+  <hr>
+  <p>with 相关 相应于在with 于end之前声明一个.myMap.person1的变量,作用域是with与end之间</p>
+  <p>{{.myMap}}</p>
+  <p>我是:{{.myMap.person1.Name}}</p>
+  <p>年龄:{{.myMap.person1.Age}}</p>
+  {{ with .myMap.person1}}
+  <p>我是:{{ .Name }}</p>
+  <p>年龄:{{ .Age }}</p>
+  {{ end }}
+
+  <hr>
+  <p>预定义函数 </p>
+  {{/*相当于取hobby 中索引为2对应的value*/}}
+  {{ index .hobby 2 }}
+  <p>爱好的个数是:{{ len .hobby }}</p>
+  {{ $y := 200}}
+  {{ if and $v $y}}
+  <p>xxx{{ $y }}</p>
+  {{end}}
+  <p>{{ or $v 10 20 }}</p>
+  <p>{{ print "xxxxx"}}</p>
+</body>
+</html>
