@@ -12,11 +12,24 @@ type Preson struct {
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("./hello.tmpl")
+
+	/* // 自定义函数 	
+	kua := func(arg string)(string, error) {
+		return arg+"真漂亮",nil
+	} */
+	//t, err := template.New("hello").Funcs(template.FuncMap{"kua":kua}).ParseFiles("./hello.tmpl")
+	t, err := template.ParseFiles("./hello.tmpl")
+	if err !=nil {
+		log.Printf("template error%s",err.Error())
+	}
+	// = template.ParseFiles("./hello.tmpl")
 	person := Preson{
 		Name: "沙河 小王子",
 		Age: 18,
 	}
+
+	
+
 	myMap  := make(map[string]Preson)
 	myMap["person1"] = person
 	
@@ -53,4 +66,3 @@ func main() {
 		panic("ListenAndServe :8889 error"+err.Error())
 	}
 }
-//https://www.bilibili.com/video/av78808893/?spm_id_from=333.788.videocard.0

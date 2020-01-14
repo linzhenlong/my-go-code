@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello</title>
+</head>
+<body>
+  <h1>自定义函数</h1>
+  <p>学生列表</p>
+  <table border="1">
+  <tr>
+    <th>索引</th>
+    <th>ID</th>
+    <th>name</th>
+    <th>AGE</th>
+    <th>gender</th>
+  </tr>
+  {{range $indx, $v := .}}
+    <tr {{$oushu := oushu $indx }}{{if eq $oushu 0}} style="color:red" {{else}} style="color:green"{{end}}>
+      <td>{{ $indx }}</td>
+      <td>{{ $v.ID }}</td>
+      <td>{{ kua $v.Name }}</td>
+      <td>{{ $v.Age }}</td>
+      <td>{{ $v.Gender }}</td>
+    </tr>
+  {{end}}
+  </table>
+</body>
+</html>
