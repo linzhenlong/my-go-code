@@ -74,10 +74,42 @@ func logPanic(handle httprouter.Handle) httprouter.Handle {
 		handle(w, r , p)
 	}
 }
+
+func Func2Handler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	t := template.New("hello2.tmpl")
+	fuck := func(name string)string{
+		return name + "fuck 苍井空~~"
+	}
+	funcMap := template.FuncMap{
+		"fuck":fuck,
+	}
+
+	t, err := t.Funcs(funcMap).ParseFiles("./hello2.tmpl")
+	if err != nil {
+		log.Printf("template 解析失败:%s", err.Error())
+	}
+	name := "小王子"
+	t.Execute(w, name)
+}
+// TmplDemo01 模板嵌套.
+func TmplDemo01(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	// 定义模板
+	// 解析模板
+	// 需要将被包含的模板写在后面.
+	t, err := template.ParseFiles("./t.tmpl","./ul.tmpl")
+	if err != nil {
+		log.Printf("template 解析失败:%s", err.Error())
+	}
+	// 渲染模板
+	name := "丰田帅小伙"
+	t.Execute(w, name)
+}
 // RegisterHTTPHandlers 注册路由.
 func RegisterHTTPHandlers() *httprouter.Router {
 	router := httprouter.New()
 	router.GET("/func",logPanic(FuncHandler))
+	router.GET("/func2",logPanic(Func2Handler))
+	router.GET("/tmpldemo1",logPanic(TmplDemo01))
 	//router.GET("/func",FuncHandler)
 	return router
 }
