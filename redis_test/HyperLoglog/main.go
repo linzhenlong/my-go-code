@@ -26,7 +26,7 @@ func CreateRedis() *redis.Client {
 
 func main() {
 
-	userNum := flag.Int("userNum", 10000, "用户个数")
+	userNum := flag.Int("userNum", 1000000, "用户个数")
 	//logPath := flag.String("logPath","/tmp/hll.log", "日志")
 	flag.Parse()
 	log := logrus.Logger{
@@ -49,20 +49,35 @@ func main() {
 
 	redisClient := CreateRedis()
 	f, _ := redisClient.Del("hll:users").Result()
-	log.Infof("redisClient.Del", f)
-	for i := 1; i <= *userNum; i++ {
-		r, err := redisClient.PFAdd("hll:users", i).Result()
-		if err != nil {
-			log.Error("redisClient.PFAdd error", err, i)
-			break
-		}
+	log.Infof("redisClient.Del %d", f)
+	var (
+		sucN int
+		errN int
+	)
+	for i:=0;i<10;i++ {
+		go func(n int) {
+			for i := n*(*userNum / 10); i <= (n+1)*(*userNum / 10); i++ {
+				r, err := redisClient.PFAdd("hll:users", i+*userNum).Result()
+				if err != nil {
+					log.Error("redisClient.PFAdd error", err, i)
+					break
+				}
+				if r == 1 {
+					sucN ++
+				} else {
+					errN++
+				}
+				log.Infof("sucN:%d ;errN:%d",sucN, errN)
+				/* count, _ := redisClient.PFCount("hll:users").Result()
+				if i == *userNum {
+					cha := count - int64(i)
+					rate := float64(cha / int64(i))
+					log.Infof("pfcount=%d,i=%d,r=%d, 差值:%d,概率%f", count, i, r, cha, rate)
+				} */
+			}
 
-		count, _ := redisClient.PFCount("hll:users").Result()
-		if i == *userNum {
-			cha := count - int64(i)
-			rate := float64(cha / int64(i))
-			log.Infof("pfcount=%d,i=%d,r=%d, 差值:%d,概率%f", count, i, r, cha, rate)
-		}
+		}(i)
 	}
+	
 	time.Sleep(time.Second * 100)
 }

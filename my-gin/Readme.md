@@ -4,7 +4,7 @@
 
 `html/template`包实现了数据驱动的模板，用于生成可防止代码注入的安全的HTML内容。它提供了和`text/template`包相同的接口，Go语言中输出HTML的场景都应使用`html/template`这个包。
 
-# 模板与渲染
+## 模板与渲染
 
 在一些前后端不分离的Web架构中，我们通常需要在后端将一些数据渲染到HTML文档中，从而实现动态的网页（网页的布局和样式大致一样，但展示的内容并不一样）效果。
 
@@ -399,5 +399,267 @@ call
     如果有2个返回值的方法返回的error非nil，模板执行会中断并返回给调用模板执行者该错误；
 ```
 
-例如:
+### 比较函数
 
+布尔函数会将任何类型的零值视为假，其余视为真。
+
+下面是定义为函数的二元比较运算的集合：
+
+```template
+eq      如果arg1 == arg2则返回真
+ne      如果arg1 != arg2则返回真
+lt      如果arg1 < arg2则返回真
+le      如果arg1 <= arg2则返回真
+gt      如果arg1 > arg2则返回真
+ge      如果arg1 >= arg2则返回真
+```
+
+为了简化多参数相等检测，eq（只有eq）可以接受2个或更多个参数，它会将第一个参数和其余参数依次比较，返回下式的结果：
+
+```template
+{{eq arg1 arg2 arg3}}
+```
+
+比较函数只适用于基本类型（或重定义的基本类型，如”type Celsius float32”）。但是，整数和浮点数不能互相比较。
+
+
+
+### 自定义函数
+
+Go的模板支持自定义函数。
+
+```go
+package main
+
+import (
+	"github.com/julienschmidt/httprouter"
+	"time"
+	"math/rand"
+	"strconv"
+	"html/template"
+	"log"
+	"io/ioutil"
+	"net/http"
+)
+type User struct {
+	ID int
+	Name string
+	Age int
+	Gender string
+}
+
+func getAge(max ,min int) int {
+	if min > max {
+		return min
+	}
+	rand.Seed(time.Now().UnixNano())
+	randNum := rand.Intn(max)
+	if randNum > min {
+		return randNum
+	}
+	if randNum < min {
+		return min
+	}
+	return randNum
+}
+
+func FuncHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	htmlByte, err := ioutil.ReadFile("./hello.tmpl")
+	if err != nil {
+		log.Fatalf("ioutil.ReadFile error:%s", err.Error())
+	}
+	// 自定义一个kua 方法
+	kua := func(arg string)(string, error) {
+		return arg+"真棒啊~~~",nil
+	}
+	// 偶数
+	oushu := func(num int)(int) {
+		return num%2
+	}
+	tmpl, err := template.New("hello").Funcs(template.FuncMap{"kua":kua,"oushu":oushu}).Parse(string(htmlByte))
+	if err != nil {
+		log.Fatalf("template 解析失败:%s", err.Error())
+	}
+	var res []User
+	for i:=1;i<10;i++ {
+		user := User{
+			ID: i,
+			Name: "学生"+strconv.Itoa(i),
+			Age: getAge(30,18),
+			Gender: "男",
+		}
+		res = append(res, user)
+	}
+	tmpl.Execute(w, res)
+	
+}
+func RegisterHttpHandlers() *httprouter.Router {
+	router := httprouter.New()
+	router.GET("/func",FuncHandler)
+	return router
+}
+
+func main() {
+	r := RegisterHttpHandlers()
+
+	http.ListenAndServe(":8889", r)
+}
+```
+
+我们可以在模板文件`hello.tmpl`中按照如下方式使用我们自定义的`kua`和oushu函数了。
+
+```go
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello</title>
+</head>
+<body>
+  <h1>自定义函数</h1>
+  <p>学生列表</p>
+  <table border="1">
+  <tr>
+    <th>索引</th>
+    <th>ID</th>
+    <th>name</th>
+    <th>AGE</th>
+    <th>gender</th>
+  </tr>
+  {{range $indx, $v := .}}
+    <tr {{$oushu := oushu $indx }}{{if eq $oushu 0}} style="color:red" {{else}} {{end}}>
+      <td>{{ $indx }}</td>
+      <td>{{ $v.ID }}</td>
+      <td>{{ kua $v.Name }}</td>
+      <td>{{ $v.Age }}</td>
+      <td>{{ $v.Gender }}</td>
+    </tr>
+  {{end}}
+  </table>
+</body>
+</html>
+```
+
+### 嵌套template
+
+我们可以在template中嵌套其他的template。这个template可以是单独的文件，也可以是通过`define`定义的template。
+
+举个例子： `t.tmpl`文件内容如下：
+
+```go
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tmpl test</title>
+</head>
+<body>
+    {{/*嵌套了一个模板*/}}
+    <h1>测试嵌套template语法</h1>
+    <hr>
+    {{template "ul.tmpl"}}
+    <hr>
+    {{template "ol.tmpl"}}
+
+    <p>{{ . }}</p>
+</body>
+</html>
+{{/*通过define 定义一个模板*/}}
+{{ define "ol.tmpl"}}
+<ol>
+    <li>喜欢吃饭</li>
+    <li>睡觉</li>
+    <li>打豆豆</li>
+</ol>
+{{end}}
+```
+
+`ul.tmpl`文件内容如下：
+
+```go
+<ul>
+    <li>注释</li>
+    <li>日志</li>
+    <li>测试</li>
+</ul>
+```
+
+我们注册一个`TmplDemo01`路由处理函数.
+
+```go
+// TmplDemo01 模板嵌套.
+func TmplDemo01(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	// 定义模板
+	// 解析模板
+	// 需要将被包含的模板写在后面.
+	t, err := template.ParseFiles("./t.tmpl","./ul.tmpl")
+	if err != nil {
+		log.Printf("template 解析失败:%s", err.Error())
+	}
+	// 渲染模板
+	name := "丰田帅小伙"
+	t.Execute(w, name)
+}
+```
+
+**注意**：在解析模板时，被嵌套的模板一定要在后面解析，例如上面的示例中`t.tmpl`模板中嵌套了`ul.tmpl`，所以`ul.tmpl`要在`t.tmpl`后进行解析。
+
+### block
+
+```template
+{{block "name" pipeline}} T1 {{end}}
+```
+
+`block`是定义模板`{{define "name"}} T1 {{end}}`和执行`{{template "name" pipeline}}`缩写，典型的用法是定义一组根模板，然后通过在其中重新定义块模板进行自定义。
+
+定义一个根模板`templates/base.tmpl`，内容如下：
+
+```template
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>Go Templates</title>
+</head>
+<body>
+<div class="container-fluid">
+    {{block "content" . }}{{end}}
+</div>
+</body>
+</html>
+```
+
+然后定义一个`templates/index.tmpl`，”继承”`base.tmpl`：
+
+```tempalte
+{{template "base.tmpl"}}
+
+{{define "content"}}
+    <div>Hello world!</div>
+{{end}}
+```
+
+然后使用`template.ParseGlob`按照正则匹配规则解析模板文件，然后通过`ExecuteTemplate`渲染指定的模板：
+
+```go
+func index(w http.ResponseWriter, r *http.Request){
+	tmpl, err := template.ParseGlob("templates/*.tmpl")
+	if err != nil {
+		fmt.Println("create template failed, err:", err)
+		return
+	}
+	err = tmpl.ExecuteTemplate(w, "index.tmpl", nil)
+	if err != nil {
+		fmt.Println("render template failed, err:", err)
+		return
+	}
+}
+```
+
+如果我们的模板名称冲突了，例如不同业务线下都定义了一个`index.tmpl`模板，我们可以通过下面两种方法来解决。
+
+1. 在模板文件开头使用`{{define 模板名}}`语句显式的为模板命名。
+2. 可以把模板文件存放在`templates`文件夹下面的不同目录中，然后使用`template.ParseGlob("templates/**/*.tmpl")`解析模板。
