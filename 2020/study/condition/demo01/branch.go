@@ -74,5 +74,3 @@ func main() {
 	}
 	fmt.Println(grade(0),grade(55),grade(88),grade(95),grade(66))
 }
-
-///Users/smzdm/Documents/自己/狗浪/【提升高度】Google资深工程师带你全面掌握Go语言/第2章 基础语法/2-5 循环.avi

@@ -133,4 +133,3 @@ func main() {
 	consts()
 	enums()
 }
-//该看/Users/smzdm/Documents/自己/狗浪/【提升高度】Google资深工程师带你全面掌握Go语言/第2章 基础语法/2-2 内建变量类型.avi

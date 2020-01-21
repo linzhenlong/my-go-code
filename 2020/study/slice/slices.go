@@ -88,8 +88,4 @@ func main() {
 	//tail := sNew[len(sNew)-1]
 	sNew = sNew[:len(sNew)-1]
 	printSlice(sNew)
-
-	///Users/smzdm/Documents/自己/狗浪/【提升高度】Google资深工程师带你全面掌握Go语言/第3章 内建容器/3-4 Map.mp4
-	
-
 }
