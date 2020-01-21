@@ -15,4 +15,11 @@ func main() {
 	fmt.Println(q.IsEmpty())
 	fmt.Println(q.Pop())
 	fmt.Println(q.IsEmpty())
+	q.Push("abc")
+	q.Push("abcd")
+	q.Push("abcde")
+	fmt.Println(q.Pop())
+	fmt.Println(q.Pop())
+	fmt.Println(q.Pop())
+	fmt.Println(q.IsEmpty())
 }

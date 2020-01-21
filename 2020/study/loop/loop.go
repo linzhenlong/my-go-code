@@ -8,6 +8,10 @@ import "os"
 
 import "bufio"
 
+import "io"
+
+import "strings"
+
 // int 转二进制
 func convertTobin(n int) string {
 	result := ""
@@ -24,11 +28,7 @@ func printFile(filename string) {
 	if err != nil {
 		panic(err)
 	}
-	scanner := bufio.NewScanner(file)
-	// 省略递增条件
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
+	printFileContents(file)
 	defer file.Close()
 }
 
@@ -36,6 +36,13 @@ func printFile(filename string) {
 func forever() {
 	for {
 		fmt.Println("死循环")
+	}
+}
+func printFileContents(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
+	// 省略递增条件
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
 	}
 }
 func main() {
@@ -46,5 +53,9 @@ func main() {
 
 	filename := "abc.txt"
 	printFile(filename)
-	forever()
+	s := `abcadadasdad"d"
+	lllll
+	dadasdasdasd`
+	printFileContents(strings.NewReader(s))
+	//forever()
 }
