@@ -1,3 +1,5 @@
+github.com/aybabtme/color v0.0.0-20140713052517-28ad4cc941d6 h1:k5FebMq+CuzGrf3LBwO3JbwCk5tX+PJQ5L7tR0MQT38=
+github.com/aybabtme/color v0.0.0-20140713052517-28ad4cc941d6/go.mod h1:k6bCbg1gudUfWem/VvfWXsk5Qqag/NDXzEHu0mNcsPM=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -28,6 +30,8 @@ github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5y
 github.com/gomodule/redigo v2.0.0+incompatible h1:K/R+8tc58AaqLkqG2Ol3Qk+DR/TlNuhuh457pBFPtt0=
 github.com/gomodule/redigo v2.0.0+incompatible/go.mod h1:B4C85qUVwatsJoIUNIfCRsp7qO0iAmpGFZ4EELWSbC4=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+github.com/gpmgo/gopm v0.6.5 h1:1qxV2Sd9tNNIWZfoU8X1rVS1gsvRWdGjE7dNEAn7baU=
+github.com/gpmgo/gopm v0.6.5/go.mod h1:FWEPLeqfmyPd/EvN1qvFm/yexQOVMAQcYAesdZJA9H4=
 github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/json-iterator/go v1.1.7 h1:KfgG9LzI+pYjr4xvmz/5H4FXjokeP+rlHLhv3iH62Fo=

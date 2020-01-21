@@ -74,7 +74,7 @@ func logPanic(handle httprouter.Handle) httprouter.Handle {
 		handle(w, r , p)
 	}
 }
-
+// Func2Handler .
 func Func2Handler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	t := template.New("hello2.tmpl")
 	fuck := func(name string)string{
