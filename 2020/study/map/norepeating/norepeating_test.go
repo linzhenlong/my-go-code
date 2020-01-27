@@ -30,9 +30,19 @@ func TestSubstr(t *testing.T) {
 	}
 }
 
-// 跑用例:go test -bench .
+// 1.跑用例:go test -bench .
+// 2.go test -bench . -cpuprofile cpu.out 看cpu使用率
+
+// 3. go tool pprof cpu.out 查看cpu.out.
+// 3.1 输入web 可以看到
 func BenchmarkSubstr(b *testing.B) {
 	s := "黑灰化肥灰会挥发发灰黑讳为黑灰花会飞"
+	// 把s扩大几倍
+	for i:=0; i< 10;i++ {
+		s +=s
+	}
+	b.Logf("len(s)=%d", len(s))
+	b.ResetTimer() // 重置一下时间，将准备数据的时间排除出去.
 	ans := 7
 	for i := 0; i < b.N; i++ {
 		actual := lengthOfNoRepeatingSubStr(s)
