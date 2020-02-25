@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	_ "net/http/pprof" //http://127.0.0.1:9000/debug/pprof/ 性能分享.
 )
 type userError interface{
 	error
