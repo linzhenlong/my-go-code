@@ -72,9 +72,13 @@ func eular() {
 // 
 func triangle() {
 	var a, b int = 3,4
+	fmt.Println(calcTriangle(a, b))
+}
+
+func calcTriangle(a, b int) int {
 	var c int
 	c = int(math.Sqrt(float64(a * a + b * b)))
-	fmt.Println(c)
+	return c
 }
 
 // 常量的定义
@@ -133,4 +137,3 @@ func main() {
 	consts()
 	enums()
 }
-//该看/Users/smzdm/Documents/自己/狗浪/【提升高度】Google资深工程师带你全面掌握Go语言/第2章 基础语法/2-2 内建变量类型.avi

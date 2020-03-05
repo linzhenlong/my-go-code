@@ -1,33 +1,51 @@
 package main
 
-import "fmt"
+import(
+	"net/http"
+	"log"
+	"io/ioutil"
+	"os"
 
-type St struct {
-	name string
-	age int
+)
+
+type appHandler func(w http.ResponseWriter, r *http.Request) error
+
+// 捕获异常
+func catchPanic(handler appHandler) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := handler(w, r)
+		if err != nil {
+			log.Printf("catch panic: %s", err.Error())
+			code := http.StatusOK
+			switch {
+			case os.IsNotExist(err):
+				code = http.StatusNotFound
+			case os.IsPermission(err):
+				code = http.StatusForbidden
+			default:
+				code = http.StatusInternalServerError
+			}
+			http.Error(w, http.StatusText(code), code)
+		}
+	}
 }
 
+func list(w http.ResponseWriter, r *http.Request) error {
+	path := r.URL.Path[len("/list/"):]
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	contents , err := ioutil.ReadAll(file)
+	if err !=nil {
+		return err
+	}
+	w.Write(contents)
+	return nil
+}
 func main() {
-	m := make(map[string]*St)
-	stus := []St{
-		{
-			name: "小王子",
-			age: 18,
-		},
-		{
-			name: "娜扎",
-			age: 20,
-		},
-		{
-			name: "大王八",
-			age: 30,
-		},
-	}
-	for key ,stu := range stus {
-		m[stu.name] = &stus[key]
-	}
-	fmt.Println(m)
-	for k, v := range m {
-		fmt.Println(k,"==>",v.name)
-	}
+	http.HandleFunc("/list/", catchPanic(list))
+	http.ListenAndServe(":9000", nil)
 }
