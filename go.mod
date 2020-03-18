@@ -17,6 +17,7 @@ require (
 	github.com/kataras/iris v11.1.1+incompatible
 	github.com/kataras/iris/v12 v12.1.8 // indirect
 	github.com/klauspost/compress v1.10.2 // indirect
+	github.com/labstack/gommon v0.3.0
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mgutz/str v1.2.0
