@@ -2,9 +2,11 @@ package repositories
 
 import (
 	"database/sql"
+	"encoding/json"
+	"testing"
+
 	"github.com/linzhenlong/my-go-code/ms/product/common"
 	"github.com/linzhenlong/my-go-code/ms/product/datamodels"
-	"testing"
 )
 
 var (
@@ -48,6 +50,7 @@ func TestInsert(t *testing.T) {
 	t.Logf("Insert product success proID:%d", productID)
 }
 func TestSelectBYkey(t *testing.T) {
+	t.SkipNow()
 	pro, err := productInterface.SelectByKey(productID)
 	t.Log("productID===>", productID)
 	if err != nil {
@@ -56,5 +59,14 @@ func TestSelectBYkey(t *testing.T) {
 	if pro.ProductName != "this is a test" {
 		t.Fatalf("SelectByKey pro.ProductName Error")
 	}
-	t.Logf("SelectByKey success")
+	t.Logf("SelectByKey success =>%v", pro)
+
+	contents, _ := json.Marshal(pro)
+	t.Logf("%s", string(contents))
+}
+
+func TestSelectAll(t *testing.T) {
+	proList, _ := productInterface.SelectAll()
+	contents, _ := json.Marshal(proList)
+	t.Logf("%s", string(contents))
 }

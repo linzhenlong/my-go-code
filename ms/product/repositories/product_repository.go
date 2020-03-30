@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/linzhenlong/my-go-code/ms/product/common"
 	"github.com/linzhenlong/my-go-code/ms/product/datamodels"
@@ -60,6 +61,7 @@ func (p *ProductManager) Insert(product *datamodels.Product) (id int64, err erro
 	sql := "insert into " + p.table + "(product_name,product_num,product_image,product_url) values(?,?,?,?)"
 
 	stmt, err := p.mysqlConn.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return
 	}
@@ -79,6 +81,7 @@ func (p *ProductManager) Delete(id int64) bool {
 	}
 	sql := "Delete FORM" + p.table + " WHERE id=? limit 1"
 	stmt, err := p.mysqlConn.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return false
 	}
@@ -102,8 +105,11 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	if product.ID == 0 {
 		return errors.New("productID 不能为空")
 	}
+	log.Printf("%#v", product)
+	
 	sql := "update " + p.table + " set product_name=?,product_num=?,product_image=?,product_url=? where id=? limit 1"
 	stmt, err := p.mysqlConn.Prepare(sql)
+	defer stmt.Close()
 	if err != nil {
 		return err
 	}
@@ -122,9 +128,11 @@ func (p *ProductManager) SelectByKey(productID int64) (product *datamodels.Produ
 	}
 	sqlTemplate := "select id,product_name,product_num,product_image,product_url from " + p.table + " where id=?"
 	stmt, err := p.mysqlConn.Prepare(sqlTemplate)
+	defer stmt.Close()
 	if err != nil {
 		return
 	}
+	log.Printf("lzltest")
 	var (
 		productName  string
 		productNum   int64

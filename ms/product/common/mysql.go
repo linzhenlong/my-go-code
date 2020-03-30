@@ -2,8 +2,10 @@ package common
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"reflect"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // NewMysqlConn 创建数据库连接.
@@ -30,8 +32,9 @@ func GetResultRow(rows *sql.Rows) map[string]string {
 		for i, v := range values {
 			if v != nil {
 				log.Printf("v:%v", v)
+				log.Printf("k:%v", colums[i])
+				log.Printf("vtype:%v", reflect.TypeOf(v))
 				resultRow[colums[i]] = string(v.([]byte))
-				log.Printf("resultRow[%v]=%v", colums[i], string(v.([]byte)))
 			}
 		}
 	}
