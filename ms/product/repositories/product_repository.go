@@ -3,10 +3,10 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"log"
-
+	"github.com/jinzhu/gorm"
 	"github.com/linzhenlong/my-go-code/ms/product/common"
 	"github.com/linzhenlong/my-go-code/ms/product/datamodels"
+	"log"
 )
 
 // 1.定义接口
@@ -27,14 +27,16 @@ type IProduct interface {
 type ProductManager struct {
 	table     string
 	mysqlConn *sql.DB
+	gormCoon  *gorm.DB
 }
 
 // NewProductManager 构造方法 这里的方法返回值是IProduct return 里面返回的是ProductManager
 // 也就是说，如果ProductManager实现了IProduct里的方法就OK了，起到自检的效果.
-func NewProductManager(table string, db *sql.DB) IProduct {
+func NewProductManager(table string, db *sql.DB, gormDB *gorm.DB) IProduct {
 	return &ProductManager{
 		table:     table,
 		mysqlConn: db,
+		gormCoon:  gormDB,
 	}
 }
 
@@ -47,6 +49,13 @@ func (p *ProductManager) Conn() (err error) {
 		}
 		p.mysqlConn = mysql
 	}
+	if p.gormCoon == nil {
+		gorm, err := common.NewGorm()
+		if err != nil {
+			return err
+		}
+		p.gormCoon = gorm
+	}
 	if p.table == "" {
 		p.table = "product"
 	}
@@ -58,7 +67,7 @@ func (p *ProductManager) Insert(product *datamodels.Product) (id int64, err erro
 	if err = p.Conn(); err != nil {
 		return
 	}
-	sql := "insert into " + p.table + "(product_name,product_num,product_image,product_url) values(?,?,?,?)"
+	/* sql := "insert into " + p.table + "(product_name,product_num,product_image,product_url) values(?,?,?,?)"
 
 	stmt, err := p.mysqlConn.Prepare(sql)
 	defer stmt.Close()
@@ -69,7 +78,14 @@ func (p *ProductManager) Insert(product *datamodels.Product) (id int64, err erro
 	if err != nil {
 		return
 	}
-	return result.LastInsertId()
+	return result.LastInsertId() */
+	p.gormCoon.NewRecord(product)
+	err = p.gormCoon.Create(&product).Error
+	if err != nil {
+		return
+	}
+
+	return product.ID, err
 }
 
 // Delete 实现删除方法.
@@ -79,7 +95,10 @@ func (p *ProductManager) Delete(id int64) bool {
 		// 数据库连不上就直接删除失败吧.
 		return false
 	}
-	sql := "Delete FORM" + p.table + " WHERE id=? limit 1"
+	if id == 0 {
+		return false
+	}
+	/* sql := "Delete FORM" + p.table + " WHERE id=? limit 1"
 	stmt, err := p.mysqlConn.Prepare(sql)
 	defer stmt.Close()
 	if err != nil {
@@ -93,7 +112,15 @@ func (p *ProductManager) Delete(id int64) bool {
 	if err != nil {
 		return false
 	}
-	return affectedRows > 0
+	return affectedRows > 0 */
+	product := datamodels.Product{
+		ID: id,
+	}
+	err := p.gormCoon.Delete(&product).Error
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // Update 商品更新方法.
@@ -105,9 +132,14 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	if product.ID == 0 {
 		return errors.New("productID 不能为空")
 	}
+	pro := datamodels.Product{
+		ID: product.ID,
+	}
+
 	log.Printf("%#v", product)
-	
-	sql := "update " + p.table + " set product_name=?,product_num=?,product_image=?,product_url=? where id=? limit 1"
+	err := p.gormCoon.Model(&pro).Updates(&product).Error
+	return err
+	/* sql := "update " + p.table + " set product_name=?,product_num=?,product_image=?,product_url=? where id=? limit 1"
 	stmt, err := p.mysqlConn.Prepare(sql)
 	defer stmt.Close()
 	if err != nil {
@@ -118,7 +150,7 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	if err != nil {
 		return err
 	}
-	return nil
+	return nil */
 }
 
 // SelectByKey 通过productID 获取product信息.
@@ -126,32 +158,14 @@ func (p *ProductManager) SelectByKey(productID int64) (product *datamodels.Produ
 	if err = p.Conn(); err != nil {
 		return
 	}
-	sqlTemplate := "select id,product_name,product_num,product_image,product_url from " + p.table + " where id=?"
-	stmt, err := p.mysqlConn.Prepare(sqlTemplate)
-	defer stmt.Close()
-	if err != nil {
-		return
+
+	pro := &datamodels.Product{}
+	err = p.gormCoon.First(&pro, productID).Error
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return pro, err
 	}
-	log.Printf("lzltest")
-	var (
-		productName  string
-		productNum   int64
-		productImage string
-		productURL   string
-		ID           int64
-	)
-	err = stmt.QueryRow(productID).Scan(&ID, &productName, &productNum, &productImage, &productURL)
-	if err != nil && err != sql.ErrNoRows {
-		return
-	}
-	product = &datamodels.Product{
-		ID:           ID,
-		ProductName:  productName,
-		ProductNum:   productNum,
-		ProductImage: productImage,
-		ProductURL:   productURL,
-	}
-	return
+	return pro, nil
 }
 
 // SelectAll 获取所有的商品列表.
@@ -159,34 +173,6 @@ func (p *ProductManager) SelectAll() (products []*datamodels.Product, err error)
 	if err = p.Conn(); err != nil {
 		return
 	}
-	stmt, err := p.mysqlConn.Prepare("select id,product_name,product_num,product_image,product_url from " + p.table)
-	if err != nil {
-		return
-	}
-	res, err := stmt.Query()
-	if err != nil && err != sql.ErrNoRows {
-		return
-	}
-	for res.Next() {
-		var (
-			productName  string
-			productNum   int64
-			productImage string
-			productURL   string
-			ID           int64
-		)
-		err = res.Scan(&ID, &productName, &productNum, &productImage, &productURL)
-		if err != nil && err != sql.ErrNoRows {
-			continue
-		}
-		product := &datamodels.Product{
-			ID:           ID,
-			ProductName:  productName,
-			ProductNum:   productNum,
-			ProductImage: productImage,
-			ProductURL:   productURL,
-		}
-		products = append(products, product)
-	}
+	err = p.gormCoon.Find(&products).Error
 	return
 }

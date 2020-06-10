@@ -1,0 +1,49 @@
+<div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small>添加商品</small></div>
+    </div>
+
+    <hr>
+
+    <div class="am-g">
+    {{if lt .product.ID 1}}
+     <div class="am-u-sm-12 am-u-md-6">
+     <strong class="am-text-primary am-text-lg">不存在产品ID:{{.product.ID}}的商品</strong>
+     </div>
+    {{else}}
+        <div class="am-u-sm-12 am-u-md-6">
+            <form class="am-form" action="/product/update" method="post">
+                <fieldset>
+                    <legend>编辑商品</legend>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-1">商品id（其实可以搞一个隐藏域）</label>
+                        <input type="text" class="" id="doc-ipt-pwd-1" name="id" placeholder="输入商品链接" value="{{.product.ID}}" readonly="true">
+                    </div>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-email-1">商品名称</label>
+                        <input type="text" class="" id="doc-ipt-email-1" name="product_name" placeholder="输入商品名称" value="{{.product.ProductName}}">
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-1">商品个数</label>
+                        <input type="text" class="" id="doc-ipt-pwd-1" name="product_num" placeholder="输入商品个数" value="{{.product.ProductNum}}">
+                    </div>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-1">商品图片</label>
+                        <input type="text" class="" id="doc-ipt-pwd-1" name="product_image" placeholder="输入商品图片" value="{{.product.ProductImage}}">
+                    </div>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-1">商品链接</label>
+                        <input type="text" class="" id="doc-ipt-pwd-1" name="product_url" placeholder="输入商品链接" value="{{.product.ProductURL}}">
+                    </div>
+                    <p>
+                        <button type="submit" class="am-btn am-btn-default">提交</button>
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+        {{end}}
+
+    </div>
+
+</div>

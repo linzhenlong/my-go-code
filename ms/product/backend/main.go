@@ -16,7 +16,6 @@ func main() {
 	app := iris.New()
 	// 设置错误等级
 	app.Logger().SetLevel("debug")
-
 	// 注册模板
 	tmplate := iris.HTML("./web/views", ".html").Layout("shared/layout.html").Reload(true)
 	app.RegisterView(tmplate)
@@ -39,18 +38,31 @@ func main() {
 	if err != nil {
 		log.Fatalf("mysql 连接error:%v", err)
 	}
-
+	gormDB, err := common.NewGorm()
+	if err != nil {
+		log.Fatalf("mysql-gorm连接error:%v", err)
+	}
 	// 创建上下文环境
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
 	// 注册控制器，实现路由
-	productRpository := repositories.NewProductManager("product", db)
+	productRpository := repositories.NewProductManager("product", db, gormDB)
 	prodcutService := services.NewProductService(productRpository)
 
 	productParty := app.Party("/product")
 	product := mvc.New(productParty)
 	product.Register(ctx, prodcutService)
 	product.Handle(new(controllers.ProductController))
+
+	// 注册控制器，实现路由
+	orderRepository := repositories.NewOrderManager("order", gormDB)
+	orderService := services.NewOrderService(orderRepository)
+
+	orderParty := app.Party("/order")
+	order := mvc.New(orderParty)
+	order.Register(ctx, orderService, prodcutService)
+	order.Handle(new(controllers.OrderController))
 
 	app.Get("/", func(ctx iris.Context) {
 		ctx.HTML("hello")

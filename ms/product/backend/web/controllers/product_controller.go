@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
@@ -35,6 +36,7 @@ func (p *ProductController) GetList() mvc.View {
 	}
 }
 
+// PostUpdate 更新商品
 func (p *ProductController) PostUpdate() {
 	product := &datamodels.Product{}
 
@@ -51,4 +53,63 @@ func (p *ProductController) PostUpdate() {
 		p.Ctx.WriteString(err.Error())
 	}
 	p.Ctx.Redirect("/product/list")
+}
+
+// PostAdd 添加商品.
+func (p *ProductController) PostAdd() {
+	product := &datamodels.Product{}
+	err := p.Ctx.ReadForm(product)
+	if err != nil {
+		p.Ctx.StatusCode(iris.StatusInternalServerError)
+		p.Ctx.WriteString(err.Error())
+	}
+	p.Ctx.Application().Logger().Debugf("%#v", product)
+	_, err = p.ProductService.InsertProduct(product)
+	if err != nil {
+		p.Ctx.StatusCode(iris.StatusInternalServerError)
+		p.Ctx.WriteString(err.Error())
+	}
+	p.Ctx.Redirect("/product/list")
+}
+
+//GetAdd 商品添加页
+func (p *ProductController) GetAdd() mvc.View {
+	return mvc.View{
+		Name: "product/add.html",
+	}
+}
+
+// GetEdit 商品编辑.
+func (p *ProductController) GetEdit() mvc.View {
+	id := p.Ctx.URLParam("id")
+	p.Ctx.Application().Logger().Debugf("urlid:%v", id)
+	productID, _ := strconv.ParseInt(id, 10, 64)
+	p.Ctx.Application().Logger().Debugf("%d", productID)
+	product, err := p.ProductService.GetProductByID(productID)
+	if err != nil {
+		p.Ctx.StatusCode(iris.StatusInternalServerError)
+		p.Ctx.WriteString(err.Error())
+	}
+	p.Ctx.Application().Logger().Debugf("prouduct:%#v", product)
+	p.Ctx.Application().Logger().Debugf("err:%#v", err)
+	return mvc.View{
+		Name: "product/edit.html",
+		Data: iris.Map{
+			"product": product,
+		},
+	}
+}
+
+// GetDel 删除一个商品
+func (p *ProductController) GetDel() {
+	id, _ := p.Ctx.URLParamInt64("id")
+	p.Ctx.Application().Logger().Debugf("urlid:%v", id)
+	status := p.ProductService.DeleteProductByID(id)
+	if status {
+
+		p.Ctx.WriteString("<script>alert('succ');location.href='/product/list';</script>")
+	} else {
+		p.Ctx.WriteString("<script>alert('err');location.href='/product/list';</script>")
+	}
+
 }

@@ -1,6 +1,8 @@
 package common
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"log"
 	"reflect"
@@ -60,4 +62,11 @@ func TypeConversion(value string, ntype string) (reflect.Value, error) {
 
 	}
 	return reflect.ValueOf(value), errors.New("未知错误")
+}
+
+// GenMd5 md5
+func GenMd5(str string) string {
+	hash := md5.New()
+	hash.Write([]byte(str))
+	return hex.EncodeToString(hash.Sum(nil))
 }

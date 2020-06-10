@@ -1,6 +1,6 @@
 <div class="admin-content-body">
       <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">表格</strong> / <small>Table</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">列表</strong> / <small>订单列表</small></div>
       </div>
 
       <hr>
@@ -49,19 +49,19 @@
                     <input type="checkbox" />
                 </th>
                 <th class="table-id">
-                    ID
+                    订单ID
                 </th>
                 <th class="table-title">
-                    名称
+                    商品名称
                 </th>
                 <th class="table-type">
-                    个数
+                    用户ID
                 </th>
                 <th class="table-author am-hide-sm-only">
                     图片
                 </th>
                 <th class="table-date am-hide-sm-only">
-                    链接
+                    订单状态
                 </th>
                 <th class="table-set">
                     操作
@@ -69,20 +69,20 @@
               </tr>
               </thead>
               <tbody>
-              {{range $key, $v := .productList}}
+              {{range $key, $v := .orderList}}
               <tr>
                 <td><input type="checkbox" /></td>
-                <td>{{$v.ID}}</td>
+                <td>{{$v.OrderID}}</td>
                 <td><a href="#">{{$v.ProductName}}</a></td>
-                <td>{{$v.ProductNum}}</td>
+                <td>{{$v.UserID}}</td>
                 <td class="am-hide-sm-only"><img src="{{$v.ProductImage}}"></td>
-                <td class="am-hide-sm-only"><a href="{{$v.ProductURL}}">{{$v.ProductURL}}</a></td>
+                <td class="am-hide-sm-only"><a href="{{$v.OrderStatus}}">{{if eq $v.OrderStatus 0}}未开始{{else if eq $v.OrderStatus 1}}已开始{{else}}已结束{{end}}</a></td>
                 <td>
                   <div class="am-btn-toolbar">
                     <div class="am-btn-group am-btn-group-xs">
-                      <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="/product/edit?id={{$v.ID}}"><span class="am-icon-pencil-square-o"></span> 编辑</a>
+                      <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="/order/edit?id={{$v.OrderID}}"><span class="am-icon-pencil-square-o"></span> 编辑</a>
                       <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
-                      <a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="/product/del?id={{$v.ID}}"><span class="am-icon-trash-o"></span> 删除</a>
+                      <a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" href="/order/del?id={{$v.OrderID}}"><span class="am-icon-trash-o"></span> 删除</a>
                     </div>
                   </div>
                 </td>
@@ -91,16 +91,14 @@
               </tbody>
             </table>
             <div class="am-cf">
-              共 15 条记录
+              共 {{.orderTotal}} 条记录
               <div class="am-fr">
                 <ul class="am-pagination">
-                  <li class="am-disabled"><a href="#">«</a></li>
-                  <li class="am-active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">»</a></li>
+                  <li {{if eq .pageData.firstpage .pageData.currpage}}class="am-disabled"{{end}}><a href="{{.Url}}&page={{.pageData.firstpage}}">«</a></li>
+                  {{range $key, $v := .pageData.pages}}
+                   <li {{ if eq $.pageData.currpage $v}}class="am-active"{{end}}><a href="{{$.Url}}&page={{$v}}">{{$v}}</a></li>
+                  {{end}}
+                  <li {{if eq .pageData.lastpage .pageData.currpage}}class="am-disabled"{{end}} ><a href="{{.Url}}&page={{.pageData.lastpage}}">»</a></li>
                 </ul>
               </div>
             </div>

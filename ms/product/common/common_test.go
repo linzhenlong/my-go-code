@@ -3,6 +3,9 @@ package common
 import (
 	"database/sql"
 	"testing"
+	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type product struct {
@@ -15,11 +18,13 @@ type product struct {
 }
 
 var (
-	mysql *sql.DB
+	mysql  *sql.DB
+	myGorm *gorm.DB
 )
 
 func TestMain(m *testing.M) {
 	mysql, _ = NewMysqlConn()
+	myGorm, _ = NewGorm()
 	m.Run()
 }
 func TestGetResultRow(t *testing.T) {
@@ -46,4 +51,64 @@ func TestDataToStruct(t *testing.T) {
 	productRes := &product{}
 	DataToStructByTagSQL(res, productRes)
 	t.Log(productRes)
+}
+
+func TestGorm(t *testing.T) {
+	has := myGorm.HasTable("product")
+	if has {
+		t.Log("has")
+	} else {
+		t.Log("no has")
+	}
+}
+
+type Goods struct {
+	GoodsModel
+	GoodsName  string `json:"goods_name" gorm:"goods_name"`
+	GoodsNum   int64  `json:"goods_num" gorm:"goods_num"`
+	GoodsImage string `json:"goods_image" gorm:"goods_image"`
+	GoodsURL   string `json:"goods_url" gorm:"goods_url"`
+}
+
+func (g Goods) TableName() string {
+	return "goods"
+}
+
+type GoodsModel struct {
+	ID        int64 `json:"id" gorm:"id primary_key AUTO_INCREMENT"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
+}
+
+func TestGormCreate(t *testing.T) {
+	t.SkipNow()
+	/* goods := Good{
+		GoodsName:  "this is test goods",
+		GoodsNum:   199,
+		GoodsImage: "http://img0.pconline.com.cn/pconline/2003/26/13310924_61b2bc9b0f61ce9edaf308ecf9138b3_thumb.png",
+		GoodsURL:   "http://www.baidu.com/",
+	} */
+	//myGorm.DropTable("goods")
+	err := myGorm.CreateTable(&Goods{}).GetErrors()
+	if len(err) > 0 {
+		t.Fatalf("%v", err)
+	}
+	//myGorm.DropTable("goods")
+	//myGorm.DropTable(&Good{})
+}
+
+func TestNewRecord(t *testing.T) {
+	goods := Goods{
+		GoodsName:  "this is test goods",
+		GoodsNum:   199,
+		GoodsImage: "http://img0.pconline.com.cn/pconline/2003/26/13310924_61b2bc9b0f61ce9edaf308ecf9138b3_thumb.png",
+		GoodsURL:   "http://www.baidu.com/",
+	}
+
+	err := myGorm.Create(&goods).Error
+	if err != nil {
+		t.Fatalf("%v", err)
+	}
+	t.Logf("%d", goods.ID)
 }
