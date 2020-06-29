@@ -6,6 +6,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	"github.com/linzhenlong/my-go-code/ms/product/common"
 	"github.com/linzhenlong/my-go-code/ms/product/datamodels"
 	"github.com/linzhenlong/my-go-code/ms/product/services"
 )
@@ -18,7 +19,19 @@ type ProductController struct {
 
 //GetList 商品列表
 func (p *ProductController) GetList() mvc.View {
-	productList, err := p.ProductService.GetAllProduct()
+	params := make(map[string]interface{})
+
+	page, err := p.Ctx.URLParamInt("page")
+	if err != nil || page < 0 {
+		page = 1
+	}
+
+	urlPre := "/product/list?"
+	offset := (page - 1) * pageSize
+	params["offset"] = offset
+	params["limit"] = pageSize
+	productList, err := p.ProductService.SelectAllByParams(params)
+	total := p.ProductService.GetTotal(params)
 
 	/* for i, v := range productList {
 		log.Printf("%d =>%v", i, v.ID)
@@ -28,10 +41,17 @@ func (p *ProductController) GetList() mvc.View {
 	if err != nil {
 		log.Printf("err:%v", err)
 	}
+	pageData := common.Paginator(page, pageSize, total)
+	for k, v := range pageData {
+		log.Printf("k=>%v,v:%v", k, v)
+	}
 	return mvc.View{
 		Name: "product/view.html",
 		Data: iris.Map{
 			"productList": productList,
+			"total":       total,
+			"pageData":    pageData,
+			"Url":         urlPre,
 		},
 	}
 }

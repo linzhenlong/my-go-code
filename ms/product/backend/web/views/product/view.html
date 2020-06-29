@@ -91,16 +91,14 @@
               </tbody>
             </table>
             <div class="am-cf">
-              共 15 条记录
+              共 {{.total}} 条记录
               <div class="am-fr">
                 <ul class="am-pagination">
-                  <li class="am-disabled"><a href="#">«</a></li>
-                  <li class="am-active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">»</a></li>
+                  <li {{if eq .pageData.firstpage .pageData.currpage}}class="am-disabled"{{end}}><a href="{{.Url}}&page={{.pageData.firstpage}}">«</a></li>
+                  {{range $key, $v := .pageData.pages}}
+                   <li {{ if eq $.pageData.currpage $v}}class="am-active"{{end}}><a href="{{$.Url}}&page={{$v}}">{{$v}}</a></li>
+                  {{end}}
+                  <li {{if eq .pageData.lastpage .pageData.currpage}}class="am-disabled"{{end}} ><a href="{{.Url}}&page={{.pageData.lastpage}}">»</a></li>
                 </ul>
               </div>
             </div>

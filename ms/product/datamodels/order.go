@@ -3,9 +3,9 @@ package datamodels
 // Order 订单结构体.
 type Order struct {
 	ID          int64 `json:"id" gorm:"id"`
-	UserID      int64 `json:"user_id" gorm:"user_id"`
-	ProductID   int64 `json:"product_id"  gorm:"product_id"`
-	OrderStatus int64 `json:"order_status" gorm:"order_status"` // 订单状态
+	UserID      int64 `json:"user_id" gorm:"user_id" form:"user_id"`
+	ProductID   int64 `json:"product_id"  gorm:"product_id" form:"product_id"`
+	OrderStatus int64 `json:"order_status" gorm:"order_status" form:"order_status"` // 订单状态
 }
 
 const (

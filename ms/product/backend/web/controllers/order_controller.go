@@ -7,6 +7,7 @@ import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 	"github.com/linzhenlong/my-go-code/ms/product/common"
+	"github.com/linzhenlong/my-go-code/ms/product/datamodels"
 	"github.com/linzhenlong/my-go-code/ms/product/services"
 )
 
@@ -38,11 +39,42 @@ func (o *OrderController) GetEdit() mvc.View {
 	if id <= 0 || err != nil {
 		o.Ctx.Redirect("/order/list")
 	}
+	orderProduct := ProductOrder{}
+	product, err := o.ProductService.GetProductByID(orderInfo.ProductID)
+	orderProduct.ProductID = product.ID
+	orderProduct.ProductName = product.ProductName
+	orderProduct.ProductNum = product.ProductNum
+	orderProduct.ProductImage = product.ProductImage
+	orderProduct.ProductURL = product.ProductURL
+	orderProduct.OrderID = orderInfo.ID
+	orderProduct.UserID = orderInfo.UserID
+	orderProduct.OrderStatus = orderInfo.OrderStatus
+
+	log.Printf("%#v", orderProduct)
+
 	return mvc.View{
 		Name: "order/edit",
 		Data: iris.Map{
-			"order": orderInfo,
+			"order": orderProduct,
 		},
+	}
+}
+
+// PostUpdate 订单更新.
+func (o *OrderController) PostUpdate() {
+	order := datamodels.Order{}
+	err := o.Ctx.ReadForm(&order)
+	if err != nil && !iris.IsErrPath(err) {
+		o.Ctx.StatusCode(iris.StatusInternalServerError)
+		o.Ctx.HTML(err.Error())
+		log.Printf("%#v", err)
+	}
+	log.Printf("%#v", order)
+	err = o.OrderService.UpdateOrder(&order)
+	if err != nil {
+		o.Ctx.HTML("<script>alert('err');location.href='/order/list';</script>")
+	} else {
+		o.Ctx.HTML("<script>alert('success');location.href='/order/list';</script>")
 	}
 }
 
@@ -100,5 +132,19 @@ func (o *OrderController) GetList() mvc.View {
 			"pageData":   pageData,
 			"Url":        urlPre,
 		},
+	}
+}
+
+// GetDel 删除订单.
+func (o *OrderController) GetDel() {
+	id, err := o.Ctx.URLParamInt64("id")
+	if err != nil || id < 0 {
+		o.Ctx.HTML("<script>alert('err');location.href='/order/list';</script>")
+	}
+	status := o.OrderService.DeleteOrder(id)
+	if status {
+		o.Ctx.HTML("<script>alert('success');location.href='/order/list';</script>")
+	} else {
+		o.Ctx.HTML("<script>alert('err');location.href='/order/list';</script>")
 	}
 }

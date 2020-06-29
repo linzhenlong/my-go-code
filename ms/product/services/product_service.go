@@ -12,6 +12,8 @@ type IProductService interface {
 	DeleteProductByID(int64) bool
 	InsertProduct(*datamodels.Product) (int64, error)
 	UpdateProduct(*datamodels.Product) error
+	GetTotal(map[string]interface{}) int64
+	SelectAllByParams(map[string]interface{}) ([]*datamodels.Product, error)
 }
 
 // ProductService 结构体.
@@ -50,4 +52,14 @@ func (p *ProductService) InsertProduct(product *datamodels.Product) (int64, erro
 // UpdateProduct 插入商品.
 func (p *ProductService) UpdateProduct(product *datamodels.Product) error {
 	return p.productRepository.Update(product)
+}
+
+// GetTotal .
+func (p *ProductService) GetTotal(params map[string]interface{}) int64 {
+	return p.productRepository.GetTotal(params)
+}
+
+// SelectAllByParams .
+func (p *ProductService) SelectAllByParams(params map[string]interface{}) ([]*datamodels.Product, error) {
+	return p.productRepository.SelectAllByParams(params)
 }

@@ -55,6 +55,9 @@ func (u *UserManagerRepository) SelectByName(name string) (user *datamodels.User
 	}
 	user = &datamodels.User{}
 	err = u.myGorm.Debug().Where("user_name=?", name).First(user).Error
+	if err == gorm.ErrRecordNotFound {
+		err = nil
+	}
 	return user, err
 }
 

@@ -19,6 +19,8 @@ type IProduct interface {
 	Update(*datamodels.Product) error               // 更新
 	SelectByKey(int64) (*datamodels.Product, error) // 查询
 	SelectAll() ([]*datamodels.Product, error)      // 获取所有商品
+	SelectAllByParams(map[string]interface{}) ([]*datamodels.Product, error)
+	GetTotal(map[string]interface{}) int64
 }
 
 // 2.实现接口
@@ -137,7 +139,12 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	}
 
 	log.Printf("%#v", product)
-	err := p.gormCoon.Model(&pro).Updates(&product).Error
+	productMap := make(map[string]interface{})
+	productMap["product_name"] = product.ProductName
+	productMap["product_num"] = product.ProductName
+	productMap["product_image"] = product.ProductImage
+	productMap["product_url"] = product.ProductURL
+	err := p.gormCoon.Debug().Model(&pro).Updates(productMap).Error
 	return err
 	/* sql := "update " + p.table + " set product_name=?,product_num=?,product_image=?,product_url=? where id=? limit 1"
 	stmt, err := p.mysqlConn.Prepare(sql)
@@ -174,5 +181,36 @@ func (p *ProductManager) SelectAll() (products []*datamodels.Product, err error)
 		return
 	}
 	err = p.gormCoon.Find(&products).Error
+	return
+}
+
+// GetTotal 获取总数.
+func (p *ProductManager) GetTotal(params map[string]interface{}) int64 {
+	db := p.gormCoon.Debug().Model(&datamodels.Product{})
+	productName, ok := params["product_name"].(string)
+	if ok {
+		db = db.Where("product_name like %?%", productName)
+	}
+	var total int64
+	db.Count(&total)
+	return total
+}
+
+// SelectAllByParams .
+func (p *ProductManager) SelectAllByParams(params map[string]interface{}) (products []*datamodels.Product, err error) {
+	db := p.gormCoon.Debug().Model(&datamodels.Product{})
+	productName, ok := params["product_name"].(string)
+	if ok {
+		db = db.Where("product_name like %?%", productName)
+	}
+	limit, ok := params["limit"].(int)
+	if ok {
+		db = db.Limit(limit)
+	}
+	offset, ok := params["offset"].(int)
+	if ok {
+		db = db.Offset(offset)
+	}
+	err = db.Find(&products).Error
 	return
 }
