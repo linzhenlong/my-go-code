@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.etcd.io/etcd/clientv3"
@@ -54,7 +56,9 @@ func main() {
 			"topic":"nginx-log"
 		}
 	]`
-	client.Put(ctx, "/logagent/collect_config", jsonStr)
+	ip, _ := GetOutboundIP()
+	etcdKey := fmt.Sprintf("/logagent/%s/collect_config", ip)
+	client.Put(ctx, etcdKey, jsonStr)
 	//client.Delete(ctx, "/logagent/collect_config")
 	cancel()
 	// get
@@ -66,4 +70,18 @@ func main() {
 	for _, val := range resp2.Kvs {
 		log.Printf("%s:%s\n", val.Key, val.Value)
 	}
+}
+
+// GetOutboundIP ...
+func GetOutboundIP() (ip string, err error) {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer conn.Close()
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	//fmt.Println(localAddr.String())
+	ip = strings.Split(localAddr.IP.String(), ":")[0]
+	return
 }

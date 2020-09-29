@@ -1,24 +1,15 @@
 package main
 
-import "time"
+import "runtime"
 
-var c = make(chan int) // 无缓冲channel
+import "fmt"
 
-var a int
+func main() {
 
-func f() {
-	a = 1
-	select {
-	case v := <-c:
-		print(v)
-	default:
-		print("defualt")
-		time.Sleep(time.Second)
+	runtime.GOMAXPROCS(3)
+	for { 
+		go fmt.Println(0)
+		fmt.Println(1)
 	}
 
-}
-func main() {
-	go f()
-	c <- 0
-	print(a)
 }
