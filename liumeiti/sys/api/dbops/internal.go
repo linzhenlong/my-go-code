@@ -1,17 +1,18 @@
 package dbops
 
 import (
-	"github.com/linzhenlong/my-go-code/liumeiti/sys/api/defs"
 	"database/sql"
+	"github.com/linzhenlong/my-go-code/liumeiti/sys/api/defs"
 	"strconv"
 	"sync"
 )
+
 // InsertSession 写入session.
-func InsertSession(sessionID string, ttl int64, userName string)(err error) {
+func InsertSession(sessionID string, ttl int64, userName string) (err error) {
 	ttlStr := strconv.FormatInt(ttl, 10)
 	stmtIns, err := dbConn.Prepare("INSERT INTO sessions(session_id,ttl,login_name) values(?, ?, ?)")
 	if err != nil {
-		return 
+		return
 	}
 	_, err = stmtIns.Exec(sessionID, ttlStr, userName)
 	if err != nil {
@@ -20,27 +21,29 @@ func InsertSession(sessionID string, ttl int64, userName string)(err error) {
 	defer stmtIns.Close()
 	return
 }
+
 // RetrieveSession 获取session.
-func RetrieveSession(sessionID string)(session *defs.SimpleSession, err error) {
+func RetrieveSession(sessionID string) (session *defs.SimpleSession, err error) {
 	ss := &defs.SimpleSession{}
 	stmtOut, err := dbConn.Prepare("select ttl,login_name from sessions where session_id=?")
-	if err !=nil {
-		return ss,err
+	if err != nil {
+		return ss, err
 	}
 	var (
-		ttl string
+		ttl       string
 		loginName string
 	)
 	err = stmtOut.QueryRow(sessionID).Scan(&ttl, &loginName)
-	if err != nil && err !=sql.ErrNoRows {
+
+	if err != nil && err != sql.ErrNoRows {
 		return
 	}
 	if err == sql.ErrNoRows {
 		return
 	}
-	
-	ttlInt,err := strconv.ParseInt(ttl,10, 64)
-	if err !=nil {
+
+	ttlInt, err := strconv.ParseInt(ttl, 10, 64)
+	if err != nil {
 		return nil, err
 	}
 	ss.UserName = loginName
@@ -50,12 +53,12 @@ func RetrieveSession(sessionID string)(session *defs.SimpleSession, err error) {
 }
 
 // RetrieveAllSessions 获取所有sessions.
-func RetrieveAllSessions()(*sync.Map, error) {
+func RetrieveAllSessions() (*sync.Map, error) {
 	m := &sync.Map{}
 	sqlTemplate := "select session_id, ttl, login_name from sessions"
 	stmt, err := dbConn.Prepare(sqlTemplate)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	rows, err := stmt.Query()
 	if err != nil {
@@ -63,7 +66,7 @@ func RetrieveAllSessions()(*sync.Map, error) {
 	}
 	for rows.Next() {
 		var (
-			ttl string
+			ttl       string
 			loginName string
 			sessionID string
 		)
@@ -71,10 +74,10 @@ func RetrieveAllSessions()(*sync.Map, error) {
 		if scanErr != nil {
 			break
 		}
-		ttlInt ,_ := strconv.ParseInt(ttl, 10, 64)
-		m.Store(sessionID,&defs.SimpleSession{
+		ttlInt, _ := strconv.ParseInt(ttl, 10, 64)
+		m.Store(sessionID, &defs.SimpleSession{
 			UserName: loginName,
-			TTL: ttlInt,
+			TTL:      ttlInt,
 		})
 	}
 	defer stmt.Close()

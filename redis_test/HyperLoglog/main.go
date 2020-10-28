@@ -1,9 +1,13 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"flag"
 	"os"
+	"strconv"
 	"time"
+
 	"github.com/go-redis/redis"
 	"github.com/sirupsen/logrus"
 )
@@ -50,34 +54,34 @@ func main() {
 	redisClient := CreateRedis()
 	f, _ := redisClient.Del("hll:users").Result()
 	log.Infof("redisClient.Del %d", f)
-	var (
+	/* var (
 		sucN int
 		errN int
-	)
-	for i:=0;i<10;i++ {
-		go func(n int) {
-			for i := n*(*userNum / 10); i <= (n+1)*(*userNum / 10); i++ {
-				r, err := redisClient.PFAdd("hll:users", i+*userNum).Result()
-				if err != nil {
-					log.Error("redisClient.PFAdd error", err, i)
-					break
-				}
-				if r == 1 {
-					sucN ++
-				} else {
-					errN++
-				}
-				log.Infof("sucN:%d ;errN:%d",sucN, errN)
-				/* count, _ := redisClient.PFCount("hll:users").Result()
-				if i == *userNum {
-					cha := count - int64(i)
-					rate := float64(cha / int64(i))
-					log.Infof("pfcount=%d,i=%d,r=%d, 差值:%d,概率%f", count, i, r, cha, rate)
-				} */
-			}
+	) */
 
-		}(i)
+	for i := 0; i < *userNum; i++ {
+
+		v := strconv.Itoa(i + *userNum)
+		md5 := GenMd5(v)
+		r, err := redisClient.PFAdd("hll:users", md5).Result()
+		if err != nil {
+			log.Error("redisClient.PFAdd error", err, i)
+			break
+		}
+		/* if r == 1 {
+			sucN++
+		} else {
+			errN++
+		}
+		log.Infof("sucN:%d ;errN:%d", sucN, errN) */
+		log.Infof("res:%d,i:%s", r, md5)
+
 	}
-	
+
 	time.Sleep(time.Second * 100)
+}
+func GenMd5(str string) string {
+	hash := md5.New()
+	hash.Write([]byte(str))
+	return hex.EncodeToString(hash.Sum(nil))
 }

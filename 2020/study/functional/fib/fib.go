@@ -48,16 +48,16 @@ func printFileContents(reader io.Reader) {
 }
 func main() {
 
-	/*f := fibonacci()
+	f := fibonacci()
 	fmt.Println(f()) // 1
 	fmt.Println(f()) // 1
 	fmt.Println(f()) // 2
 	fmt.Println(f()) // 3
 	fmt.Println(f()) // 5
 	fmt.Println(f()) // 8
-	fmt.Println(f()) // 13 */
+	fmt.Println(f()) // 13
 
-	f := fibonacci2()
-	printFileContents(f)
+	/* f := fibonacci2()
+	printFileContents(f) */
 
 }
