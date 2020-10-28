@@ -1,15 +1,31 @@
 package main
 
-import "runtime"
+import "sync"
 
-import "fmt"
+import "log"
+
+import "time"
 
 func main() {
+	ch := make(chan int, 10)
+	var i int
+	var wg sync.WaitGroup
+	for {
+		i++
+		if i > 100 {
+			break
+		}
 
-	runtime.GOMAXPROCS(3)
-	for { 
-		go fmt.Println(0)
-		fmt.Println(1)
+		wg.Add(1)
+		log.Println("wg.add")
+
+		go func() {
+			ch <- 1
+			defer wg.Done()
+			time.Sleep(time.Second * 2)
+			<-ch
+		}()
 	}
-
+	wg.Wait()
+	log.Println("main over")
 }

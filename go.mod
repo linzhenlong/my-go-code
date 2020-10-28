@@ -6,6 +6,7 @@ require (
 	github.com/Joker/jade v1.0.0 // indirect
 	github.com/Shopify/sarama v1.26.4
 	github.com/ajg/form v1.5.1 // indirect
+	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
 	github.com/coreos/etcd v3.3.22+incompatible
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -25,6 +26,7 @@ require (
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hpcloud/tail v1.0.0
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
@@ -60,6 +62,7 @@ require (
 	github.com/usthooz/json2go v0.0.0-20190305024703-37344bbbdd22 // indirect
 	github.com/usthooz/oozlog v0.0.0-20181128031002-7d2cfea811b6
 	github.com/valyala/fasthttp v1.14.0 // indirect
+	github.com/wolfogre/go-pprof-practice v0.0.0-20190402114113-8ce266a210ee
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2
 	github.com/yalp/jsonpath v0.0.0-20180802001716-5cc68e5049a0 // indirect
