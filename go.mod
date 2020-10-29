@@ -3,6 +3,7 @@ module github.com/linzhenlong/my-go-code
 go 1.13
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/Joker/jade v1.0.0 // indirect
 	github.com/Shopify/sarama v1.26.4
 	github.com/ajg/form v1.5.1 // indirect
