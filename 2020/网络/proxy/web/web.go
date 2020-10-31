@@ -1,33 +1,26 @@
 package main
 
-import "net/http"
-
-import "os"
-
-import "os/signal"
-
-import "log"
-
-import "strings"
-
-import "encoding/base64"
-
-import "fmt"
-
+import (
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"strings"
+)
 
 type web1Handler struct {
-
 }
 type web2Handler struct {
-
+}
+type web3Handler struct {
 }
 
 // GetIP ...
-func (w *web1Handler)GetIP(r *http.Request)string {
+func (w *web1Handler) GetIP(r *http.Request) string {
 	ips := r.Header.Get("x-forwarded-for")
-	if ips !="" {
-		ipsList := strings.Split(ips,",")
-		if len(ipsList) >0 && ipsList[0] != "" {
+	if ips != "" {
+		ipsList := strings.Split(ips, ",")
+		if len(ipsList) > 0 && ipsList[0] != "" {
 			return ipsList[0]
 		}
 	}
@@ -35,8 +28,9 @@ func (w *web1Handler)GetIP(r *http.Request)string {
 }
 
 // ServeHTTP ...
-func(w *web1Handler)ServeHTTP(writer http.ResponseWriter, r *http.Request) {
-	log.Println(r)
+func (w *web1Handler) ServeHTTP(writer http.ResponseWriter, r *http.Request) {
+	log.Println("this is web1")
+	/**
 	// basic auth 认证.
 	auth := r.Header.Get("Authorization")
 	if auth == "" {
@@ -45,7 +39,7 @@ func(w *web1Handler)ServeHTTP(writer http.ResponseWriter, r *http.Request) {
 		return
 	}
 	authList := strings.Split(auth," ")
-	
+
 	if len(authList) == 2 && authList[0] == "Basic"{
 		res, err := base64.StdEncoding.DecodeString(authList[1])
 		if err == nil && string(res) == "linzl:123" {
@@ -54,12 +48,19 @@ func(w *web1Handler)ServeHTTP(writer http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	**/
 	writer.Write([]byte("web1 用户名密码错误"))
 }
-func(* web2Handler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	
-	
+func (*web2Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	//time.Sleep(time.Second * 3)
+	log.Println("this is web2")
 	w.Write([]byte("web2"))
+
+}
+func (*web3Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	//time.Sleep(time.Second * 3)
+	log.Println("this is web3")
+	w.Write([]byte("web3"))
 
 }
 
@@ -67,15 +68,19 @@ func(* web2Handler)ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	c := make(chan os.Signal)
 	// web1 9091
-	go func(){
-		http.ListenAndServe(":9091",&web1Handler{})
+	go func() {
+		http.ListenAndServe(":9091", &web1Handler{})
 
 	}()
 	// web2 9092
-	go func(){
-		http.ListenAndServe(":9092",&web2Handler{})
+	go func() {
+		http.ListenAndServe(":9092", &web2Handler{})
 	}()
-	signal.Notify(c,os.Interrupt)
+	// web3 9093
+	go func() {
+		http.ListenAndServe(":9093", &web3Handler{})
+	}()
+	signal.Notify(c, os.Interrupt)
 	s := <-c
 	log.Println(s)
 }
