@@ -30,7 +30,7 @@ func (m *MyProxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/favicon.ico" {
 		//url, _ := url.Parse(lb.SelectByRand().Host)
 		//url, _ := url.Parse(util.LB.SelectByIPHash(r.RemoteAddr).Host)
-		url, _ := url.Parse(util.LB.RoundRobinWithWeight3().Host)
+		url, _ := url.Parse(util.LB.RoundRobin().Host)
 		reverseProxy := httputil.NewSingleHostReverseProxy(url)
 		reverseProxy.ServeHTTP(w, r)
 	}
@@ -63,7 +63,7 @@ func (m *MyProxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	**/
-	w.Write([]byte("proxy index"))
+	//w.Write([]byte("proxy index"))
 }
 
 var (
