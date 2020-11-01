@@ -39,6 +39,8 @@ type HTTPServer struct {
 	Weight        int    // 权重
 	CurrentWeight int    // 当前权重 (平滑加权算法会用到)
 	Status        string // web服务器状态,默认UP,宕机了使用DOWN
+	FailCount     int    // 记录失败次数默认是0
+	SuccessCount  int    // 成功计数器
 }
 
 // LoadBalance 负载均衡...
@@ -59,6 +61,7 @@ func NewHTTPServer(host string, weight int) *HTTPServer {
 		Weight:        weight,
 		CurrentWeight: 0, // 初始权重为0
 		Status:        "UP",
+		FailCount:     0,
 	}
 }
 
@@ -150,6 +153,10 @@ func (l *LoadBalance) RoundRobin() *HTTPServer {
 	if l.CurrentIndex >= len(l.Servers) {
 		l.CurrentIndex = 0
 	}
+	// 如果down了，在进行一次轮询,递归,需要在判断一下是否所有的节点都down,防止递归死循环.
+	if curServer.Status == "DOWN" && l.IsAllDown() { //
+		return l.RoundRobin()
+	}
 	return curServer
 }
 
@@ -226,15 +233,26 @@ func (l *LoadBalance) RoundRobinWithWeight3() *HTTPServer {
 	return maxWeightServer
 }
 
+// IsAllDown 判断是否全都节点都down掉
+func (l *LoadBalance) IsAllDown() bool {
+	nodeNum := 0
+	for _, server := range l.Servers {
+		if server.Status == "DOWN" {
+			nodeNum++
+		}
+	}
+	return nodeNum == len(l.Servers)
+}
+
 func checkServers(servers HTTPServers) {
 	ticker := time.NewTicker(time.Second * 3)
 	cheker := NewHTTPChecker(servers)
 	for {
 		select {
 		case <-ticker.C:
-			cheker.Check(time.Second * 2)
+			cheker.Check(time.Second * 4)
 			for _, s := range servers {
-				log.Println("checkServers", s.Host, s.Status)
+				log.Println("checkServers", s.Host, s.Status, s.FailCount, s.SuccessCount)
 			}
 			log.Println("======================")
 		}
