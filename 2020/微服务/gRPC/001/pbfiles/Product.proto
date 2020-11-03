@@ -3,12 +3,15 @@ package services;
 option go_package=".;services";
 message ProductRequest {
     int32 prod_id = 1; // 传入的商品ID
+
 }
 message ProdResponse {
     int32 prod_stock=1;// 商品库存
+    string product_name=2;
 }
 service ProdService {
     rpc GetProdStock(ProductRequest) returns (ProdResponse);
+    rpc GetProductName(ProductRequest) returns (ProdResponse);
 }
 
 // 加入 service 后

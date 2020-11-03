@@ -73,3 +73,40 @@ protocol-buffers文档：https://developers.google.com/protocol-buffers/docs/got
 
 
 在执行 protoc --go_out=plugins=grpc:../services Product.proto
+
+加入自鉴证书
+
+执行命令
+
+    1. openssl
+    2. 执行 `genrsa -des3 -out server.key 2048` 会生成(server.key)的私钥文件
+    3. 创建请求证书 `req -new -key server.key -out server.csr` 会生成server.csr 文件，其中Common Name 也就是域名
+    4. 删除密码执行:`rsa -in server.key -out server_no_password.key`
+    5. 执行 `x509 -req -days 365 -in server.csr -signkey server_no_password.key -out server.crt`  
+
+
+使用双向证书
+
+使用CA证书
+
+生成CA证书
+
+1. 根证书(root certificate) 是属于根证书办法机构（CA）的公钥证书。用于验证他签发的证书(客户端,服务端)
+2. 执行openssl
+3. genrsa -out ca.key 2048
+4. req -new -x509 -days 3650 -key ca.key -out ca.pem ，Common Name 填localhost
+
+生成服务端证书
+
+0. 执行openssl
+1. genrsa -out server.key 2048
+2. req -new -key server.key -out server.csr ，注意Common Name 必须填写localhost
+3. x509 -req -sha256 -CA ca.pem -CAkey ca.key -CAcreateserial -days 3650 -in server.csr -out server.pem 
+
+生成客户端证书
+
+1. ecparam -genkey -name secp384r1 -out client.key
+2. req -new -key client.key -out client.csr
+3. x509 -req -sha256 -CA ca.pem -CAkey ca.key -CAcreateserial -days 3650 -in client.csr -out client.pem
+
+程序中重新覆盖server.pem,ca.pem 和server.key

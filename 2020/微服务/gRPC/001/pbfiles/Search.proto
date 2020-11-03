@@ -1,0 +1,38 @@
+syntax="proto3"; // 指明了我们使用的是 proto3 语法,若不指明，则protocol buffer 编译器会认为是 proto2
+package services;
+option go_package=".;services";
+
+
+// 消息中定义的每个字段都有一个唯一编号
+// 字段编号用于在消息二进制格式中标识字段
+// 同时要求消息一旦使用字段编号就不应该改变。
+// 注意一点 1 到 15 的字段编号需要用1 个字节来编码，
+// 编码同时包括字段编号和字段类型
+// 16 到 2047 的字段变化使用 2 个字节。
+// 因此应将 1 到 15 的编号用在消息的常用字段上。
+// 注意应该为将来可能添加的常用字段预留字段编号
+
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+
+message SearchResponse {
+  message Result {
+    string url = 1;
+    string title = 2;
+    repeated string snippets = 3;
+  }
+  // 嵌套
+  repeated Result res = 1;
+}
+// 在另外一个消息中使用Result定义，则可以通过Parent.Type来使用
+message SomeOtherMessage {
+  SearchResponse.Result result = 1;
+}
+
+message Article {
+  string url = 1;
+  string title = 2;
+}

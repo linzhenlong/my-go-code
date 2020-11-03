@@ -1,6 +1,6 @@
 module github.com/linzhenlong/my-go-code
 
-go 1.13
+go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
@@ -8,8 +8,8 @@ require (
 	github.com/Shopify/sarama v1.26.4
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
-	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
-	github.com/coreos/etcd v3.3.22+incompatible
+	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe // indirect
+	github.com/coreos/etcd v3.3.22+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
@@ -31,7 +31,7 @@ require (
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
 	github.com/iris-contrib/httpexpect v1.1.2 // indirect
 	github.com/jinzhu/gorm v1.9.12
-	github.com/json-iterator/go v1.1.9
+	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/juju/errors v0.0.0-20190930114154-d42613fe1ab9 // indirect
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/kataras/iris v11.1.1+incompatible
@@ -52,14 +52,14 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	github.com/siddontang/go-log v0.0.0-20180807004314-8d05993dda07
+	github.com/siddontang/go-log v0.0.0-20180807004314-8d05993dda07 // indirect
 	github.com/siddontang/go-mysql v1.1.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	github.com/techoner/gophp v0.2.0
 	github.com/usthooz/json2go v0.0.0-20190305024703-37344bbbdd22 // indirect
-	github.com/usthooz/oozlog v0.0.0-20181128031002-7d2cfea811b6
+	github.com/usthooz/oozlog v0.0.0-20181128031002-7d2cfea811b6 // indirect
 	github.com/valyala/fasthttp v1.14.0 // indirect
 	github.com/wolfogre/go-pprof-practice v0.0.0-20190402114113-8ce266a210ee
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
@@ -74,12 +74,12 @@ require (
 	golang.org/x/sys v0.0.0-20201101102859-da207088b7d1 // indirect
 	golang.org/x/text v0.3.4
 	golang.org/x/tools v0.0.0-20200904185747-39188db58858
-	google.golang.org/api v0.34.0
+	google.golang.org/api v0.34.0 // indirect
 	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0 // indirect
 	google.golang.org/grpc v1.33.1
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
-	gopkg.in/jcmturner/gokrb5.v7 v7.5.0
+	gopkg.in/jcmturner/gokrb5.v7 v7.5.0 // indirect
 	gopkg.in/olivere/elastic.v5 v5.0.86
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	moul.io/http2curl v1.0.0 // indirect

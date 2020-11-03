@@ -34,7 +34,7 @@ type ProductRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ProdId int32 `protobuf:"varint,1,opt,name=prod_id,json=prodId,proto3" json:"prod_id,omitempty"` // 传入的商品ID
+	ProId int32 `protobuf:"varint,1,opt,name=pro_id,json=proId,proto3" json:"pro_id,omitempty"`
 }
 
 func (x *ProductRequest) Reset() {
@@ -69,24 +69,24 @@ func (*ProductRequest) Descriptor() ([]byte, []int) {
 	return file_Product_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ProductRequest) GetProdId() int32 {
+func (x *ProductRequest) GetProId() int32 {
 	if x != nil {
-		return x.ProdId
+		return x.ProId
 	}
 	return 0
 }
 
-type ProdResponse struct {
+type ProductResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ProdStock   int32  `protobuf:"varint,1,opt,name=prod_stock,json=prodStock,proto3" json:"prod_stock,omitempty"` // 商品库存
+	StockStatus int32  `protobuf:"varint,1,opt,name=stock_status,json=stockStatus,proto3" json:"stock_status,omitempty"`
 	ProductName string `protobuf:"bytes,2,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
 }
 
-func (x *ProdResponse) Reset() {
-	*x = ProdResponse{}
+func (x *ProductResponse) Reset() {
+	*x = ProductResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_Product_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -94,13 +94,13 @@ func (x *ProdResponse) Reset() {
 	}
 }
 
-func (x *ProdResponse) String() string {
+func (x *ProductResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ProdResponse) ProtoMessage() {}
+func (*ProductResponse) ProtoMessage() {}
 
-func (x *ProdResponse) ProtoReflect() protoreflect.Message {
+func (x *ProductResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_Product_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -112,19 +112,19 @@ func (x *ProdResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ProdResponse.ProtoReflect.Descriptor instead.
-func (*ProdResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ProductResponse.ProtoReflect.Descriptor instead.
+func (*ProductResponse) Descriptor() ([]byte, []int) {
 	return file_Product_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ProdResponse) GetProdStock() int32 {
+func (x *ProductResponse) GetStockStatus() int32 {
 	if x != nil {
-		return x.ProdStock
+		return x.StockStatus
 	}
 	return 0
 }
 
-func (x *ProdResponse) GetProductName() string {
+func (x *ProductResponse) GetProductName() string {
 	if x != nil {
 		return x.ProductName
 	}
@@ -135,26 +135,27 @@ var File_Product_proto protoreflect.FileDescriptor
 
 var file_Product_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x08, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x29, 0x0a, 0x0e, 0x50, 0x72, 0x6f,
-	0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x70,
-	0x72, 0x6f, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x70, 0x72,
-	0x6f, 0x64, 0x49, 0x64, 0x22, 0x50, 0x0a, 0x0c, 0x50, 0x72, 0x6f, 0x64, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x72, 0x6f, 0x64, 0x5f, 0x73, 0x74, 0x6f,
-	0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x53, 0x74,
-	0x6f, 0x63, 0x6b, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x6e,
-	0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x64, 0x75,
-	0x63, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x32, 0x93, 0x01, 0x0a, 0x0b, 0x50, 0x72, 0x6f, 0x64, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x40, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f,
-	0x64, 0x53, 0x74, 0x6f, 0x63, 0x6b, 0x12, 0x18, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x16, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x42, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x50,
-	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x18, 0x2e, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
-	0x50, 0x72, 0x6f, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0c, 0x5a, 0x0a,
-	0x2e, 0x3b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x08, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x27, 0x0a, 0x0e, 0x50, 0x72, 0x6f,
+	0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x15, 0x0a, 0x06, 0x70,
+	0x72, 0x6f, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x70, 0x72, 0x6f,
+	0x49, 0x64, 0x22, 0x57, 0x0a, 0x0f, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x74, 0x6f, 0x63, 0x6b, 0x5f, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0b, 0x73, 0x74, 0x6f,
+	0x63, 0x6b, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x64,
+	0x75, 0x63, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
+	0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x32, 0xa5, 0x01, 0x0a, 0x0e,
+	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4c,
+	0x0a, 0x15, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x53, 0x74, 0x6f, 0x63,
+	0x6b, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x19, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f,
+	0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x0e,
+	0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x18,
+	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x42, 0x0c, 0x5a, 0x0a, 0x2e, 0x3b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -171,14 +172,14 @@ func file_Product_proto_rawDescGZIP() []byte {
 
 var file_Product_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_Product_proto_goTypes = []interface{}{
-	(*ProductRequest)(nil), // 0: services.ProductRequest
-	(*ProdResponse)(nil),   // 1: services.ProdResponse
+	(*ProductRequest)(nil),  // 0: services.ProductRequest
+	(*ProductResponse)(nil), // 1: services.ProductResponse
 }
 var file_Product_proto_depIdxs = []int32{
-	0, // 0: services.ProdService.GetProdStock:input_type -> services.ProductRequest
-	0, // 1: services.ProdService.GetProductName:input_type -> services.ProductRequest
-	1, // 2: services.ProdService.GetProdStock:output_type -> services.ProdResponse
-	1, // 3: services.ProdService.GetProductName:output_type -> services.ProdResponse
+	0, // 0: services.ProductService.GetProductStockStatus:input_type -> services.ProductRequest
+	0, // 1: services.ProductService.GetProductName:input_type -> services.ProductRequest
+	1, // 2: services.ProductService.GetProductStockStatus:output_type -> services.ProductResponse
+	1, // 3: services.ProductService.GetProductName:output_type -> services.ProductResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -205,7 +206,7 @@ func file_Product_proto_init() {
 			}
 		}
 		file_Product_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProdResponse); i {
+			switch v := v.(*ProductResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -245,108 +246,108 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// ProdServiceClient is the client API for ProdService service.
+// ProductServiceClient is the client API for ProductService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ProdServiceClient interface {
-	GetProdStock(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProdResponse, error)
-	GetProductName(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProdResponse, error)
+type ProductServiceClient interface {
+	GetProductStockStatus(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductResponse, error)
+	GetProductName(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductResponse, error)
 }
 
-type prodServiceClient struct {
+type productServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewProdServiceClient(cc grpc.ClientConnInterface) ProdServiceClient {
-	return &prodServiceClient{cc}
+func NewProductServiceClient(cc grpc.ClientConnInterface) ProductServiceClient {
+	return &productServiceClient{cc}
 }
 
-func (c *prodServiceClient) GetProdStock(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProdResponse, error) {
-	out := new(ProdResponse)
-	err := c.cc.Invoke(ctx, "/services.ProdService/GetProdStock", in, out, opts...)
+func (c *productServiceClient) GetProductStockStatus(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, "/services.ProductService/GetProductStockStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *prodServiceClient) GetProductName(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProdResponse, error) {
-	out := new(ProdResponse)
-	err := c.cc.Invoke(ctx, "/services.ProdService/GetProductName", in, out, opts...)
+func (c *productServiceClient) GetProductName(ctx context.Context, in *ProductRequest, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, "/services.ProductService/GetProductName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ProdServiceServer is the server API for ProdService service.
-type ProdServiceServer interface {
-	GetProdStock(context.Context, *ProductRequest) (*ProdResponse, error)
-	GetProductName(context.Context, *ProductRequest) (*ProdResponse, error)
+// ProductServiceServer is the server API for ProductService service.
+type ProductServiceServer interface {
+	GetProductStockStatus(context.Context, *ProductRequest) (*ProductResponse, error)
+	GetProductName(context.Context, *ProductRequest) (*ProductResponse, error)
 }
 
-// UnimplementedProdServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedProdServiceServer struct {
+// UnimplementedProductServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedProductServiceServer struct {
 }
 
-func (*UnimplementedProdServiceServer) GetProdStock(context.Context, *ProductRequest) (*ProdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetProdStock not implemented")
+func (*UnimplementedProductServiceServer) GetProductStockStatus(context.Context, *ProductRequest) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProductStockStatus not implemented")
 }
-func (*UnimplementedProdServiceServer) GetProductName(context.Context, *ProductRequest) (*ProdResponse, error) {
+func (*UnimplementedProductServiceServer) GetProductName(context.Context, *ProductRequest) (*ProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProductName not implemented")
 }
 
-func RegisterProdServiceServer(s *grpc.Server, srv ProdServiceServer) {
-	s.RegisterService(&_ProdService_serviceDesc, srv)
+func RegisterProductServiceServer(s *grpc.Server, srv ProductServiceServer) {
+	s.RegisterService(&_ProductService_serviceDesc, srv)
 }
 
-func _ProdService_GetProdStock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ProductService_GetProductStockStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProductRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProdServiceServer).GetProdStock(ctx, in)
+		return srv.(ProductServiceServer).GetProductStockStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/services.ProdService/GetProdStock",
+		FullMethod: "/services.ProductService/GetProductStockStatus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProdServiceServer).GetProdStock(ctx, req.(*ProductRequest))
+		return srv.(ProductServiceServer).GetProductStockStatus(ctx, req.(*ProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProdService_GetProductName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ProductService_GetProductName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProductRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProdServiceServer).GetProductName(ctx, in)
+		return srv.(ProductServiceServer).GetProductName(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/services.ProdService/GetProductName",
+		FullMethod: "/services.ProductService/GetProductName",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProdServiceServer).GetProductName(ctx, req.(*ProductRequest))
+		return srv.(ProductServiceServer).GetProductName(ctx, req.(*ProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _ProdService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "services.ProdService",
-	HandlerType: (*ProdServiceServer)(nil),
+var _ProductService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "services.ProductService",
+	HandlerType: (*ProductServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetProdStock",
-			Handler:    _ProdService_GetProdStock_Handler,
+			MethodName: "GetProductStockStatus",
+			Handler:    _ProductService_GetProductStockStatus_Handler,
 		},
 		{
 			MethodName: "GetProductName",
-			Handler:    _ProdService_GetProductName_Handler,
+			Handler:    _ProductService_GetProductName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
