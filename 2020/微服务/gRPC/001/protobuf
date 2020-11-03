@@ -1,0 +1,9 @@
+syntax="proto3";
+package services;
+
+message ProductRequest {
+    int32 prod_id = 1; // 传入的商品ID
+}
+message ProdResponse {
+    int32 prod_stock=1;// 商品库存
+}

@@ -21,11 +21,9 @@ require (
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogo/protobuf v1.3.1 // indirect
-	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/golang/protobuf v1.4.3
 	github.com/gomodule/redigo v2.0.0+incompatible
-	github.com/google/go-cmp v0.5.0 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
-	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hpcloud/tail v1.0.0
@@ -72,12 +70,14 @@ require (
 	go.etcd.io/etcd v3.3.22+incompatible
 	go.uber.org/zap v1.15.0 // indirect
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
-	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc
-	golang.org/x/sys v0.0.0-20200812155832-6a926be9bd1d // indirect
-	golang.org/x/text v0.3.3
-	golang.org/x/tools v0.0.0-20191029190741-b9c20aec41a5
-	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/grpc v1.26.0 // indirect
+	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102
+	golang.org/x/sys v0.0.0-20201101102859-da207088b7d1 // indirect
+	golang.org/x/text v0.3.4
+	golang.org/x/tools v0.0.0-20200904185747-39188db58858
+	google.golang.org/api v0.34.0
+	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0 // indirect
+	google.golang.org/grpc v1.33.1
+	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/jcmturner/gokrb5.v7 v7.5.0
 	gopkg.in/olivere/elastic.v5 v5.0.86
