@@ -1,0 +1,40 @@
+syntax = "proto3";
+package services;
+option go_package = ".;services";
+
+import "google/api/annotations.proto";
+
+
+/**
+ 搜索请求消息
+ */
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+// 搜索响应消息
+message SearchResponse {
+  int32 error_code = 1;
+  string error_msg = 2;
+  ResponseData data = 3;
+}
+// 响应data
+message ResponseData {
+  repeated ArticleInfo rows = 1;
+}
+/**
+  文章info,包括文章id和文章标题
+ */
+message ArticleInfo {
+  int32 article_id = 1;
+  string title = 2;
+}
+service SearchService {
+  rpc GetArticles(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      get:"/v1/search/{query}"
+    };
+  }
+}
+

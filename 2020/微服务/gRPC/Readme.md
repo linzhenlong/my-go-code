@@ -110,3 +110,41 @@ protocol-buffers文档：https://developers.google.com/protocol-buffers/docs/got
 3. x509 -req -sha256 -CA ca.pem -CAkey ca.key -CAcreateserial -days 3650 -in client.csr -out client.pem
 
 程序中重新覆盖server.pem,ca.pem 和server.key
+
+
+双向认证下rpc-gateway使用(同时提供rpc和http服务)
+
+grpc-geteway(https://github.com/grpc-ecosystem/grpc-gateway)
+
+相当于在grpc之上加一层代理并转发，转变成protobuf格式来访问grpc服务
+
+
+    go install \
+        github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+        github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+        google.golang.org/protobuf/cmd/protoc-gen-go \
+        google.golang.org/grpc/cmd/protoc-gen-go-grpc
+        
+ .proto 文件引入
+     import "google/api/annotations.proto";
+     
+     service SearchService {
+       rpc GetArticles(SearchRequest) returns (SearchResponse) {
+         option (google.api.http) = {  // 添加 google http api
+           get:"/v1/search/{query}"
+         };
+       }
+     }
+     
+生成两个文件
+
+cd 进入.proto文件夹
+
+1.生成Search.pb.go 文件
+
+    protoc --go_out=plugins=grpc:../services Search.proto
+    
+2. 在生成gateway 文件 search.pb.gw.go
+
+    protoc --grpc-gateway_out=logtostderr=true:../services Search.proto
+    

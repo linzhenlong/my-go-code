@@ -26,6 +26,7 @@ require (
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1
 	github.com/hpcloud/tail v1.0.0
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
@@ -75,12 +76,13 @@ require (
 	golang.org/x/text v0.3.4
 	golang.org/x/tools v0.0.0-20200904185747-39188db58858
 	google.golang.org/api v0.34.0 // indirect
-	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0 // indirect
+	google.golang.org/genproto v0.0.0-20201103154000-415bd0cd5df6
 	google.golang.org/grpc v1.33.1
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.1 // indirect
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/jcmturner/gokrb5.v7 v7.5.0 // indirect
 	gopkg.in/olivere/elastic.v5 v5.0.86
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v2 v2.3.0 // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )
