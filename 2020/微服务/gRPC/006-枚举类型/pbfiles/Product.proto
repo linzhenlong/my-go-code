@@ -1,0 +1,51 @@
+syntax = "proto3";
+package services;
+option go_package = ".;services";
+
+import "google/api/annotations.proto";
+
+message ProductRequest {
+  string pro_name = 1;
+  int32 size = 2;
+  int32 pro_id = 3;
+  ProductAreas pro_area = 4;
+}
+
+message ProductInfo {
+  string pro_name = 1;
+  int32 pro_id = 2;
+  repeated string pro_tag = 3;
+  float pro_price = 4;
+  ProductAreas pro_area = 5;
+}
+
+message ProductResponse {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated ProductInfo data = 3;
+}
+
+// 枚举类型,商品所在区域a,b,c 三个区域
+// 枚举类型的值必须要影射为数值类型，并且第一个必须为零，代表默认值
+enum ProductAreas {
+  BEI_JING = 0; //
+  HE_BEI = 1;
+  SHANG_HAI = 2;
+  SI_CHUANG = 3;
+  WU_HANG = 4;
+  SHAN_DONG = 6;
+}
+
+service ProductService {
+  rpc GetProductInfo(ProductRequest) returns (ProductResponse) {
+    option(google.api.http)= {
+      get:"/v1/product/detail/{pro_id}"
+    };
+  }
+  rpc GetProductList(ProductRequest) returns (ProductResponse) {
+    option(google.api.http) = {
+      get :"/v1/product/list/{size}"
+    };
+  }
+}
+

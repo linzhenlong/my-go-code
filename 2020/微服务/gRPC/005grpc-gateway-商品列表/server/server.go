@@ -15,7 +15,7 @@ import (
 
 func main() {
 
-	// 起两个携程拉取服务
+	// 起两个协程拉取服务
 	c := make(chan os.Signal)
 
 	go func() {
