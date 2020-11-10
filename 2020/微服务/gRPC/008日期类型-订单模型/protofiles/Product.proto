@@ -1,0 +1,35 @@
+syntax = "proto3";
+package services;
+option go_package = ".;services";
+
+import "google/api/annotations.proto";
+
+// 引入商品模型
+import "Models.proto";
+
+message ProductRequest {
+  string pro_name = 1;
+  int32 size = 2;
+  int32 pro_id = 3;
+  ProductAreas pro_area = 4;
+}
+
+message ProductResponse {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated ProductModel data = 3;
+}
+
+service ProductService {
+  rpc GetProductInfo(ProductRequest) returns (ProductModel) {
+    option(google.api.http)= {
+      get:"/v1/product/detail/{pro_id}"
+    };
+  }
+  rpc GetProductList(ProductRequest) returns (ProductResponse) {
+    option(google.api.http) = {
+      get :"/v1/product/list/{size}"
+    };
+  }
+}
+

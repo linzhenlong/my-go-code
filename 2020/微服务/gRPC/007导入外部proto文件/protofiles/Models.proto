@@ -1,0 +1,22 @@
+syntax = "proto3";
+package services;
+
+option go_package = ".;services";
+message ProductModel {
+  int32 pro_id = 1;
+  string pro_name = 2;
+  float pro_price = 3;
+  ProductAreas pro_area = 5;
+}
+
+// 枚举类型,商品所在区域a,b,c 三个区域
+// 枚举类型的值必须要影射为数值类型，并且第一个必须为零，代表默认值
+enum ProductAreas {
+  BEI_JING = 0; //
+  HE_BEI = 1;
+  SHANG_HAI = 2;
+  SI_CHUANG = 3;
+  WU_HANG = 4;
+  SHAN_DONG = 6;
+}
+
