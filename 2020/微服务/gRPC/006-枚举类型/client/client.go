@@ -35,6 +35,7 @@ func main() {
 	productInfo, err := serviceClient.GetProductInfo(ctx, &services.ProductRequest{
 		ProArea: services.ProductAreas_BEI_JING,
 	})
+
 	if err != nil {
 		fmt.Println(err)
 		return

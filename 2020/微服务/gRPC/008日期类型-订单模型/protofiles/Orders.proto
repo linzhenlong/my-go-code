@@ -5,11 +5,18 @@ option go_package= ".;services";
 import "google/api/annotations.proto";
 import "Models.proto";
 
-
+message OrderRequest {
+  OrderMain order_main = 1;
+}
 message OrderResponse {
   string status = 1;
   string message = 2;
 }
 service OrderService {
-  rpc NewOrder(OrderMain) returns (OrderResponse){};
+  rpc NewOrder(OrderRequest) returns (OrderResponse){
+    option(google.api.http) = {  // post 请求
+      post:"/v1/orders",
+      body:"order_main" // 对应 OrderRequest 的 order_main
+    };
+  };
 }

@@ -1,0 +1,31 @@
+syntax = "proto3";
+package services;
+option go_package=".;services";
+import "google/api/annotations.proto";
+
+import "Models.proto";
+
+
+message OrderRequest {
+  OrderMain order_main = 1;
+}
+
+message OrderResponse {
+  int32 err_code = 1;
+  string err_msg = 2;
+  repeated OrderMain data = 3;
+}
+
+service OrderService {
+  rpc GetOrderMain(OrderRequest) returns (OrderResponse) {
+    option(google.api.http) = {
+        get:"/v1/order/{order_main.order_id}"
+    };
+  }
+  rpc AddOrder(OrderRequest) returns (OrderResponse) {
+    option(google.api.http) = {
+      post:"/v1/order",
+      body:"order_main"
+    };
+  }
+}

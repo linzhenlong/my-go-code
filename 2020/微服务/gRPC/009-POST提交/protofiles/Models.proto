@@ -1,0 +1,63 @@
+syntax = "proto3";
+package services;
+
+import "google/protobuf/timestamp.proto";
+// 引人 protoc-gen-validate 文件
+import "validate.proto";
+
+option go_package=".;services";
+
+
+
+// 商品详情
+message ProductInfo {
+  int32 pro_id = 1; // 商品id
+  string pro_name = 2; // 商品名称
+  // 数组类型的.
+  repeated string pro_tag = 3; // 商品标签
+  float pro_price = 4; // 商品价格
+  string pro_url = 5; // 商品链接
+  // 枚举类型的
+  ProductAreas pro_area = 6; // 商品地域
+  // 日期类型的
+  google.protobuf.Timestamp pro_time = 7; // 上市时间
+  // 库存
+  int32 pro_stock_status = 8;
+}
+
+// 来个枚举类型的 商品地域
+enum ProductAreas {
+  BEIJING = 0; //必须从0开始
+  SHANGHAI = 1;
+  SHANGDONG = 2;
+  SICHUAN = 3;
+  HEBEI = 4;
+  TIANJING = 5;
+}
+
+// 主订单信息
+message OrderMain {
+  int32 order_id = 1; // 订单id
+  //int32 pro_id = 2; // 商品id
+  string order_no = 3; // 订单号
+  int32 user_id = 4[(validate.rules).int32.gt = 1000]; // 用户id,加个校验必须大于1000
+  google.protobuf.Timestamp order_time = 5;
+
+  // 嵌套 模型
+  repeated OrderDetail order_details = 6;
+}
+
+// 子订单
+message OrderDetail {
+  int32 detail_id = 1;
+  string order_no = 2;
+  int32 pro_id = 3;
+  float pro_price = 4;
+  int32 pro_nunm = 5;
+}
+
+// 流模式入门，用户模型
+message UserInfo {
+  int32 user_id = 1;
+  int32 user_score = 2;
+}

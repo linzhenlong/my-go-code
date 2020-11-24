@@ -13,6 +13,7 @@ require (
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
+	github.com/envoyproxy/protoc-gen-validate v0.4.1
 	github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4 // indirect
 	github.com/gavv/monotime v0.0.0-20190418164738-30dba4353424 // indirect
 	github.com/gin-gonic/gin v1.5.0
@@ -28,6 +29,7 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1
 	github.com/hpcloud/tail v1.0.0
+	github.com/iancoleman/strcase v0.1.2 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
 	github.com/iris-contrib/httpexpect v1.1.2 // indirect
@@ -40,6 +42,7 @@ require (
 	github.com/klauspost/compress v1.10.10 // indirect
 	github.com/labstack/gommon v0.3.0
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/lyft/protoc-gen-star v0.5.2 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mgutz/str v1.2.0
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -57,6 +60,7 @@ require (
 	github.com/siddontang/go-mysql v1.1.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/spf13/afero v1.4.1 // indirect
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	github.com/techoner/gophp v0.2.0
 	github.com/usthooz/json2go v0.0.0-20190305024703-37344bbbdd22 // indirect
@@ -71,10 +75,10 @@ require (
 	go.etcd.io/etcd v3.3.22+incompatible
 	go.uber.org/zap v1.15.0 // indirect
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
-	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102
+	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
 	golang.org/x/sys v0.0.0-20201101102859-da207088b7d1 // indirect
 	golang.org/x/text v0.3.4
-	golang.org/x/tools v0.0.0-20200904185747-39188db58858
+	golang.org/x/tools v0.0.0-20201124005743-911501bfb504
 	google.golang.org/api v0.34.0 // indirect
 	google.golang.org/genproto v0.0.0-20201103154000-415bd0cd5df6
 	google.golang.org/grpc v1.33.1

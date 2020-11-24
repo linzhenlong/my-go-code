@@ -49,7 +49,15 @@ func main() {
 		options := []grpc.DialOption{
 			grpc.WithInsecure(),
 		}
+
+		// 注册商品服务
 		err := services.RegisterProductServiceHandlerFromEndpoint(ctx, serveMux, "localhost:6061", options)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		// 注册订单服务
+		err = services.RegisterOrderServiceHandlerFromEndpoint(ctx, serveMux, "localhost:6061", options)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -72,4 +80,4 @@ func main() {
 	fmt.Println("退出了", s)
 }
 
-//https://www.bilibili.com/video/BV1Fa4y1i7C6?p=13
+//
